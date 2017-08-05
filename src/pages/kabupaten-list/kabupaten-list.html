@@ -1,0 +1,18 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Kabupaten/Kota</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <button ion-item *ngFor="let kabupaten of kabupatens" (click)="ShowKecamatan(kabupaten.id)">
+      {{ kabupaten.name }}
+    </button>
+  </ion-list>
+
+</ion-content>

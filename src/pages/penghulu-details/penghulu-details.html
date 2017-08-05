@@ -1,0 +1,71 @@
+<!--
+  Generated template for the PenghuluDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>PenghuluDetails</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <h2>Nama</h2>
+      <p>{{ penghulu.nama }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Tanggal Lahir</h2>
+      <p>{{ penghulu.tanggal_lahir | date:"dd MMMM yyyy" }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>No. KTP</h2>
+      <p>{{ penghulu.no_ktp }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Alamat</h2>
+      <p>{{ penghulu.alamat }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Provinsi</h2>
+      <p>{{ provinsi?.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Kabupaten</h2>
+      <p>{{ kabupaten?.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Kecamatan</h2>
+      <p>{{ kecamatan?.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Agama</h2>
+      <p>{{ penghulu.agama }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Pendidikan</h2>
+      <p>{{ penghulu.pendidikan }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>No. Handphone</h2>
+      <p>{{ penghulu.nomor_handphone }}</p>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

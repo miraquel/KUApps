@@ -1,0 +1,51 @@
+<!--
+  Generated template for the PernikahanPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Pernikahan</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h2 class="heading-center-page" *ngIf="nikahs?.length == 0">
+    <img class="heading-center-image" src="assets/images/sad-face.png"/>
+    <br>
+    Data Pernikahan Kosong
+    <br>
+    <button ion-button (click)="ShowPendaftaran()" clear>Isi Data Pernikahan</button>
+  </h2>
+
+  <ion-list *ngIf="nikahs?.length > 0">
+  <ion-list-header>
+    Daftar Pernikahan
+  </ion-list-header>
+  <ion-item-sliding *ngFor="let nikah of nikahs">
+    <button ion-item (click)="LoadNikahDetails(nikah.id)">
+      <h2>{{ nikah.villages.name }}</h2>
+      <p>{{ nikah.catinPria.nama }}</p>
+      <p>{{ nikah.catinWanita.nama }}</p>
+      <ion-note item-end>{{ nikah.tanggal | date:'shortDate' }}</ion-note>
+    </button>
+    <ion-item-options>
+      <button ion-button color="danger" (click)="hapusNikahAlert(nikah.id)" icon-start>
+        <ion-icon name="trash"></ion-icon>
+        Hapus
+      </button>
+      <button ion-button color="primary" icon-start>
+        <ion-icon name="create"></ion-icon>
+        Edit
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+
+</ion-content>

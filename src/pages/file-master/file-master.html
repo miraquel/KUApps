@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>File Master</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="home" padding>
+
+  <ion-card>
+  <ion-card-header>
+    <ion-icon name="book" item-start></ion-icon>
+    File Master
+  </ion-card-header>
+
+  <ion-list>
+    <button ion-item (click)="ShowLokasi()">
+      <ion-icon name="compass" item-start></ion-icon>
+      Lokasi
+    </button>
+
+    <button ion-item (click)="ShowPenghulu()">
+      <ion-icon name="person" item-start></ion-icon>
+      Penghulu
+    </button>
+
+    <button ion-item (click)="ShowAdmin()">
+      <ion-icon name="person" item-start></ion-icon>
+      Admin
+    </button>
+
+  </ion-list>
+</ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>KUApps &copy; {{year}}</ion-title>
+  </ion-toolbar>
+</ion-footer>

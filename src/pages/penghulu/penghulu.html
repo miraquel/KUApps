@@ -1,0 +1,38 @@
+<!--
+  Generated template for the PenghuluPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Penghulu</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Tarik untuk memperbarui daftar"
+      refreshingSpinner="circles"
+      refreshingText="Memperbarui..."
+      >
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <button ion-item *ngFor="let penghulu of penghulus" (click)="ShowDetails(penghulu.id)">
+      {{ penghulu.nama }}
+    </button>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab color="default" (click)="AddPenghuluModal()"><ion-icon name="person-add"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>

@@ -1,0 +1,350 @@
+<!--
+Generated template for the PendaftaranPage page.
+
+See http://ionicframework.com/docs/components/#navigation for more info on
+Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>
+      Pendaftaran
+    </ion-title>
+    <!-- <ion-buttons start>
+    <button ion-button icon-left (click)="prev()"><ion-icon name="arrow-back"></ion-icon></button>
+  </ion-buttons>
+  <ion-buttons end>
+  <button ion-button icon-right (click)="next()"><ion-icon name="arrow-forward"></ion-icon></button>
+</ion-buttons> -->
+</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-slides #signupSlider>
+
+    <ion-slide>
+
+      <ion-toolbar>
+        <ion-buttons>
+          <button ion-button color="primary" (click)="next()">
+            Selanjutnya
+            <ion-icon name="arrow-forward"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar>
+        <h2>Calon Pengantin Pria</h2>
+        <p>Isi data calon pengantin pria</p>
+        <!-- <ion-buttons end>
+        <button ion-button color="primary" (click)="next()">
+        Next
+      </button>
+    </ion-buttons> -->
+  </ion-toolbar>
+
+  <ion-item>
+    <ion-label stacked>Nama</ion-label>
+    <ion-input placeholder="Isikan Nama" type="text" [(ngModel)]="namaCatinPria"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Tanggal Lahir</ion-label>
+    <ion-datetime placeholder="Atur Tanggal Lahir" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinPria"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Agama</ion-label>
+    <ion-select placeholder="Pilih Agama" type="text" [(ngModel)]="agamaCatinPria">
+      <ion-option value="Islam">Islam</ion-option>
+      <ion-option value="Hindu">Hindu</ion-option>
+      <ion-option value="Buddha">Buddha</ion-option>
+      <ion-option value="Kristen">Kristen</ion-option>
+      <ion-option value="Konghucu">Konghucu</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Pekerjaan</ion-label>
+    <ion-select placeholder="Pilih Pekerjaan" [(ngModel)]="pekerjaanCbCatinPria" (ionChange)="pekerjaanCatinPriaLainnyaOnChange()">
+      <ion-option value="Wiraswasta">Wiraswasta</ion-option>
+      <ion-option value="Pegawai Swasta">Pegawai Swasta</ion-option>
+      <ion-option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</ion-option>
+      <ion-option value="Mahasiswa">Mahasiswa</ion-option>
+      <ion-option value="Lainnya">Lainnya</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="hidePekerjaanCatinPria">
+    <ion-label stacked>Pekerjaan Lainnya</ion-label>
+    <ion-input placeholder="Isi Pekerjaan" [(ngModel)]="pekerjaanTbCatinPria"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Alamat</ion-label>
+    <ion-input placeholder="Isi Alamat" type="text" [(ngModel)]="alamatCatinPria"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Provinsi</ion-label>
+    <ion-select placeholder="Pilih Provinsi" [(ngModel)]="provinsiSelectCatinPria" (ionChange)="LoadKabupaten('catinPria')">
+      <ion-option *ngFor="let provinsi of provinsis" [value]="provinsi.id">{{ provinsi.name }}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Kabupaten</ion-label>
+    <ion-select placeholder="Pilih Kabupaten" [(ngModel)]="kabupatenSelectCatinPria" (ionChange)="LoadKecamatan('catinPria')" [disabled]="KabupatenDisableSelectorCatinPria">
+      <ion-option *ngFor="let kabupaten of kabupatensPria" [value]="kabupaten.id">{{ kabupaten.name }}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Kecamatan</ion-label>
+    <ion-select placeholder="Pilih Kecamatan" [(ngModel)]="kecamatanSelectCatinPria" [disabled]="KecamatanDisableSelectorCatinPria">
+      <ion-option *ngFor="let kecamatan of kecamatansPria" [value]="kecamatan.id">{{ kecamatan.name }}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Wali Nikah</ion-label>
+    <ion-input placeholder="Isi Nama Wali Nikah" type="text" [(ngModel)]="wali_nikahCatinPria"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Status</ion-label>
+    <ion-input placeholder="Isi Status" type="text" [(ngModel)]="statusCatinPria"></ion-input>
+  </ion-item>
+
+</ion-slide>
+
+<ion-slide>
+
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button color="primary" (click)="prev()">
+        <ion-icon name="arrow-back"></ion-icon>
+        Sebelumnya
+      </button>
+    </ion-buttons>
+    <h2>Calon Pengantin Wanita</h2>
+    <p>Isi data calon pengantin Wanita</p>
+    <!-- <ion-buttons end>
+    <button ion-button color="primary" (click)="next()">
+    Next
+  </button>
+</ion-buttons> -->
+</ion-toolbar>
+
+<ion-item>
+  <ion-label stacked>Nama</ion-label>
+  <ion-input placeholder="Isikan Nama" type="text" [(ngModel)]="namaCatinWanita"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Tanggal Lahir</ion-label>
+  <ion-datetime placeholder="Atur Tanggal Lahir" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinWanita"></ion-datetime>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Agama</ion-label>
+  <ion-select placeholder="Pilih Agama" type="text" [(ngModel)]="agamaCatinWanita">
+    <ion-option value="Islam">Islam</ion-option>
+    <ion-option value="Hindu">Hindu</ion-option>
+    <ion-option value="Buddha">Buddha</ion-option>
+    <ion-option value="Kristen">Kristen</ion-option>
+    <ion-option value="Konghucu">Konghucu</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Pekerjaan</ion-label>
+  <ion-select placeholder="Pilih Pekerjaan" [(ngModel)]="pekerjaanCbCatinWanita" (ionChange)="pekerjaanCatinWanitaLainnyaOnChange()">
+    <ion-option value="Wiraswasta">Wiraswasta</ion-option>
+    <ion-option value="Pegawai Swasta">Pegawai Swasta</ion-option>
+    <ion-option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</ion-option>
+    <ion-option value="Mahasiswa">Mahasiswa</ion-option>
+    <ion-option value="Lainnya">Lainnya</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item *ngIf="hidePekerjaanCatinWanita">
+  <ion-label stacked>Pekerjaan Lainnya</ion-label>
+  <ion-input placeholder="Isi Pekerjaan" [(ngModel)]="pekerjaanTbCatinWanita"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Alamat</ion-label>
+  <ion-input placeholder="Isi Alamat" type="text" [(ngModel)]="alamatCatinWanita"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Provinsi</ion-label>
+  <ion-select placeholder="Pilih Provinsi" [(ngModel)]="provinsiSelectCatinWanita" (ionChange)="LoadKabupaten('catinWanita')">
+    <ion-option *ngFor="let provinsi of provinsis" [value]="provinsi.id">{{ provinsi.name }}</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Kabupaten</ion-label>
+  <ion-select placeholder="Pilih Kabupaten" [(ngModel)]="kabupatenSelectCatinWanita" (ionChange)="LoadKecamatan('catinWanita')" [disabled]="KabupatenDisableSelectorCatinWanita">
+    <ion-option *ngFor="let kabupaten of kabupatensWanita" [value]="kabupaten.id">{{ kabupaten.name }}</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Kecamatan</ion-label>
+  <ion-select placeholder="Pilih Kecamatan" [(ngModel)]="kecamatanSelectCatinWanita" [disabled]="KecamatanDisableSelectorCatinWanita">
+    <ion-option *ngFor="let kecamatan of kecamatansWanita" [value]="kecamatan.id">{{ kecamatan.name }}</ion-option>
+  </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Wali Nikah</ion-label>
+  <ion-input placeholder="Isi Nama Wali Nikah" type="text" [(ngModel)]="wali_nikahCatinWanita"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label stacked>Status</ion-label>
+  <ion-input placeholder="Isi Status" type="text" [(ngModel)]="statusCatinWanita"></ion-input>
+</ion-item>
+
+</ion-slide>
+
+<ion-slide>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button color="primary" (click)="prev()">
+        <ion-icon name="arrow-back"></ion-icon>
+        Sebelumnya
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+  <h2>Data Calon Pengantin</h2>
+  <p>Cek kembali data sebelum diproses</p>
+
+  <ion-item-group>
+    <ion-item-divider color="light">Calon Pengantin Pria</ion-item-divider>
+    <ion-item>
+      <h2>Nama</h2>
+      <p class="review">{{ namaCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Tanggal Lahir</h2>
+      <p class="review">{{ tanggalLahirCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Agama</h2>
+      <p class="review">{{ agamaCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Pekerjaan</h2>
+      <p class="review">{{ pekerjaanCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Alamat</h2>
+      <p class="review">{{ alamatCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Wali Nikah</h2>
+      <p class="review">{{ wali_nikahCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Status</h2>
+      <p class="review">{{ statusCatinPria }}</p>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider color="light">Calon Pengantin Wanita</ion-item-divider>
+      <ion-item>
+        <h2>Nama</h2>
+        <p class="review">{{ namaCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Tanggal Lahir</h2>
+        <p class="review">{{ tanggalLahirCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Agama</h2>
+        <p class="review">{{ agamaCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Pekerjaan</h2>
+        <p class="review">{{ pekerjaanCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Alamat</h2>
+        <p class="review">{{ alamatCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Wali Nikah</h2>
+        <p class="review">{{ wali_nikahCatinWanita }}</p>
+      </ion-item>
+
+      <ion-item>
+        <h2>Status</h2>
+        <p class="review">{{ statusCatinWanita }}</p>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-slide>
+
+  <ion-slide>
+
+    <ion-item>
+      <h2 stacked>Nama Calon Pengantin Pria</h2>
+      <p class="review">{{ namaCatinPria }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2 stacked>Nama Calon Pengantin Wanita</h2>
+      <p class="review">{{ namaCatinWanita }}</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Desa</ion-label>
+      <ion-select placeholder="Pilih Desa" [(ngModel)]="desaSelectNikah">
+        <ion-option *ngFor="let desa of desas" [value]="desa.id">{{ desa.name }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Penghulu</ion-label>
+      <ion-select placeholder="Pilih Penghulu" [(ngModel)]="penghuluId">
+        <ion-option *ngFor="let penghulu of penghulus" [value]="penghulu.id">{{ penghulu.nama }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Tanggal Nikah</ion-label>
+      <ion-datetime placeholder="Atur Tanggal Nikah" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalNikah"></ion-datetime>
+    </ion-item>
+
+    <button ion-button round block (click)="simpanNikah()">Simpan</button>
+
+  </ion-slide>
+
+</ion-slides>
+
+<!-- <ion-fab left top>
+<button ion-fab color="default" (click)="prev()"><ion-icon name="arrow-round-back"></ion-icon></button>
+</ion-fab> -->
+
+<ion-fab *ngIf="hideFabButton" right bottom>
+  <button ion-fab color="success" (click)="simpan()"><ion-icon name="checkmark"></ion-icon></button>
+</ion-fab>
+</ion-content>

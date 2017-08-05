@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Beranda</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="home" padding>
+
+  <ion-card>
+  <ion-card-header>
+    Beranda
+  </ion-card-header>
+
+  <ion-list>
+
+    <button ion-item (click)="ShowPendaftaran()">
+      <ion-icon name="document" item-start></ion-icon>
+      Pendaftaran
+    </button>
+
+    <button ion-item (click)="ShowPernikahan()">
+      <ion-icon name="book" item-start></ion-icon>
+      Pernikahan
+    </button>
+
+  </ion-list>
+</ion-card>
+
+</ion-content>

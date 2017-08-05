@@ -1,0 +1,60 @@
+<!--
+  Generated template for the PernikahanDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>PernikahanDetails</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+
+    <ion-item-group>
+      <ion-item-divider color="light">Data Pernikahan</ion-item-divider>
+      <ion-item>
+        <h2>Nama Calon Pengantin Pria</h2>
+        <p>{{ namaCatinPria }}</p>
+      </ion-item>
+      <ion-item>
+        <h2>Nama Calong Pengantin Wanita</h2>
+        <p>{{ namaCatinWanita }}</p>
+      </ion-item>
+      <ion-item>
+        <h2>Desa</h2>
+        <p>{{ desa }}</p>
+      </ion-item>
+      <button ion-item (click)="loadPenghuluDetails(idPenghulu)">
+        <h2>Penghulu</h2>
+        <p>{{ namaPenghulu }}</p>
+      </button>
+      <ion-item>
+        <h2>Tanggal Nikah</h2>
+        <p>{{ tanggalNikah | date:"shortDate" }}</p>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-list>
+
+  <ion-list>
+
+    <ion-item-group>
+
+      <ion-item-divider color="light">Data Kelengkapan Pernikahan</ion-item-divider>
+      <button ion-item (click)="loadInvoiceAdd()">
+        <h2>Data Invoice</h2>
+        <p>{{ statusInvoice }}</p>
+      </button>
+
+    </ion-item-group>
+
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Provinsi</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <button ion-item *ngFor="let provinsi of provinsis" (click)="ShowKabupaten(provinsi.id)">
+      {{ provinsi.name }}
+    </button>
+  </ion-list>
+</ion-content>
