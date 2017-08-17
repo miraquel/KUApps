@@ -10,6 +10,9 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { File } from "@ionic-native/file";
+import { FileOpener } from "@ionic-native/file-opener";
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { PernikahanServiceProvider } from '../providers/pernikahan-service/pernikahan-service';
 import { LokasiServiceProvider } from '../providers/lokasi-service/lokasi-service';
@@ -35,6 +38,9 @@ import { LokasiServiceProvider } from '../providers/lokasi-service/lokasi-servic
     StatusBar,
     SplashScreen,
     ScreenOrientation,
+    InAppBrowser,
+    FileOpener,
+    File,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthServiceProvider,
     PernikahanServiceProvider,

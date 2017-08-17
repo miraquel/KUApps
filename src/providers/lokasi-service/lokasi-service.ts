@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class LokasiServiceProvider {
-  urlMaster: string = 'http://192.168.0.20:3000/';
+  urlMaster: string = 'http://192.168.0.15:3000/';
 
   constructor(public http: Http) {
     console.log('Hello LokasiServiceProvider Provider');

@@ -10,12 +10,17 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+    <ion-buttons end>
+      <button ion-button (click)="PrintModal()">
+        Cetak
+        <ion-icon name="print"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Pernikahan</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
   <h2 class="heading-center-page" *ngIf="nikahs?.length == 0">
     <img class="heading-center-image" src="assets/images/sad-face.png"/>
     <br>

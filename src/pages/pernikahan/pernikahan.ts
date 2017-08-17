@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController, Loading, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, ToastController, Loading, LoadingController } from 'ionic-angular';
 import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pernikahan-service";
 
 /**
@@ -23,7 +23,13 @@ export class PernikahanPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
+    public modalCtrl: ModalController,
     private pernikahanService: PernikahanServiceProvider) {
+  }
+
+  PrintModal() {
+    let modal = this.modalCtrl.create('PrintModalPage');
+    modal.present();
   }
 
   LoadNikah() {
