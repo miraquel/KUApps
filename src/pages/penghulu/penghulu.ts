@@ -54,7 +54,7 @@ export class PenghuluPage {
     modal.onDidDismiss(data => {
       console.log('Modal Dismiss Value :'+data);
       this.LoadPenghulu();
-    })
+    });
   }
 
   ionViewDidLoad() {

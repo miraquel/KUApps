@@ -25,52 +25,57 @@
 
     <ion-item>
       <ion-label>NIP</ion-label>
-      <ion-note item-end>
-        1304030132
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.nip }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Nama</ion-label>
-      <ion-note item-end>
-        Chaidir Ali Assegaf
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.nama }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Tanggal Lahir</ion-label>
-      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="today"></ion-datetime>
+      <ion-label text-right text-wrap>
+        {{ user.dob }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Alamat</ion-label>
-      <ion-note item-end>
-        Jl. Balai Warga I No. 13, Kec. Sukasari, Kota Tangerang
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.alamat }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Jabatan</ion-label>
-      <ion-note item-end>
-        Admin
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.jabatan }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Pendidikan</ion-label>
-      <ion-note item-end>
-        S1 Teknik Informatika
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.pendidikan }}
+      </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>Golongan</ion-label>
-      <ion-note item-end>
-        Golongan IV
-      </ion-note>
+      <ion-label text-right text-wrap>
+        {{ user.golongan }}
+      </ion-label>
     </ion-item>
 
   </ion-list>
 </ion-card>
+<button ion-button full (click)="logout()">
+  Logout
+</button>
 
 </ion-content>

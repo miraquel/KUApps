@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pernikahan-service";
+import * as moment from "moment";
 
 /**
  * Generated class for the PernikahanDetailsPage page.
@@ -28,6 +29,7 @@ export class PernikahanDetailsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private pernikahanService: PernikahanServiceProvider, public viewCtrl: ViewController) {
     this.id = navParams.get('id');
+    moment.locale('id');
   }
 
   loadPenghuluDetails(id) {
@@ -45,31 +47,30 @@ export class PernikahanDetailsPage {
 
     this.pernikahanService.ShowNikahById(this.id).subscribe(
       data => {
-        this.namaCatinPria = data.catinPria.nama;
-        this.namaCatinWanita = data.catinWanita.nama;
-        this.desa = data.villages.name;
-        this.tanggalNikah = data.tanggal;
+        this.namaCatinPria = data.catinpria.nama;
+        this.namaCatinWanita = data.catinwanita.nama;
+        this.desa = data.village.name;
+        this.tanggalNikah = moment(data.tanggal).format("DD MMMM YYYY");
         this.namaPenghulu = data.penghulu.nama;
         this.idPenghulu = data.penghulu.id;
 
-        if (!data.invoice.id) {
-            this.idInvoice = data.invoice.id;
-            this.noSlip = data.invoice.no_slip;
+        if (data.invoiceId !== null) {
+          this.idInvoice = data.invoiceId;
+          this.noSlip = data.invoice.no_slip;
+          this.statusInvoice = this.noSlip;
+        }
+        else {
+          this.statusInvoice = "Invoice Belum Diinput";
         }
 
         console.log(this.namaCatinPria);
         console.log(this.namaCatinWanita);
+        console.log(this.idInvoice);
       },
       err => {
         console.log(err);
       }
     );
-    if (this.idInvoice == 0) {
-      this.statusInvoice = "Invoice Belum Diinput";
-    }
-    else {
-      this.statusInvoice = this.noSlip;
-    }
   }
 
 }

@@ -134,7 +134,7 @@ export class PrintModalPage {
   printNikah() {
     moment.locale("id");
     var nikahs = this.nikahs.map(function(nikah) {
-      return [moment(nikah.tanggal).format("YYYY-MM-DD"), nikah.villages.name, nikah.catinPria.nama, nikah.catinWanita.nama, nikah.penghulu.nama];
+      return [moment(nikah.tanggal).format("YYYY-MM-DD"), nikah.village.name, nikah.catinpria.nama, nikah.catinwanita.nama, nikah.penghulu.nama];
     });
     var dd = {
       styles: {
@@ -187,7 +187,40 @@ export class PrintModalPage {
           nikahs,
           ['Tanggal', 'Desa', 'Calon Pengantin Pria', 'Calon Pengantin Wanita', 'Penghulu'],
           this.tanggalPrint
-        )
+        ),
+        {
+          alignment: 'center',
+          columns: [
+            {
+              text: 'Menyetujui,\n\n\n\n\n\n\n\n'
+            },
+            {
+              text: 'Mengetahui'
+            }
+          ]
+        },
+        {
+          alignment: 'center',
+          columns: [
+            {
+              text: 'H. AJAT SUDRAJAT, S.Pd.I', bold: 'true'
+            },
+            {
+              text: 'A. KHATIBI R S, S.Pd.I., MM', bold: 'true'
+            }
+          ]
+        },
+        {
+          alignment: 'center',
+          columns: [
+            {
+              text: 'Kepala KUA'
+            },
+            {
+              text: 'Kepala Tata Usaha'
+            }
+          ]
+        },
       ]
     }
     pdfMake.createPdf(dd).getBuffer((buffer) => {
@@ -219,7 +252,7 @@ export class PrintModalPage {
           });
         });
       });
-  }
+    }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PrintModalPage');

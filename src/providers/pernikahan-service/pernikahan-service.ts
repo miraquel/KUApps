@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
+import { BaseUrl } from "../base-url";
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
@@ -11,32 +12,32 @@ import 'rxjs/Rx';
 */
 @Injectable()
 export class PernikahanServiceProvider {
-  urlMaster: string = 'http://192.168.0.15:3000/';
+  urlMaster: string = BaseUrl.BASE_API_URL;
 
   constructor(public http: Http) {
     console.log('Hello PernikahanServiceProvider Provider');
   }
 
   ShowPenghulu(){
-    var url = this.urlMaster+'api/Penghulus';
+    var url = this.urlMaster+'/api/Penghulus';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowPenghuluDetails(penghuluId: number){
-    var url = this.urlMaster+'api/Penghulus/'+penghuluId;
+    var url = this.urlMaster+'/api/Penghulus/'+penghuluId;
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowNikah() {
-    var url = this.urlMaster+'api/Nikahs?filter={"include": ["catinPria","catinWanita","penghulu","villages"]}';
+    var url = this.urlMaster+'/api/Nikahs?filter={"include": ["catinpria","catinwanita","penghulu","village","invoice"]}';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowNikahById(nikahId: number) {
-    var url = this.urlMaster+'api/Nikahs/'+nikahId+'?filter={"include": ["catinPria","catinWanita","penghulu","villages","invoice"]}';
+    var url = this.urlMaster+'/api/Nikahs/'+nikahId+'?filter={"include": ["catinpria","catinwanita","penghulu","village","invoice"]}';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
@@ -70,7 +71,7 @@ export class PernikahanServiceProvider {
       status: statusCatinPria
     });
 
-    var url = this.urlMaster+'api/CatinPria';
+    var url = this.urlMaster+'/api/CatinPria';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -106,7 +107,7 @@ export class PernikahanServiceProvider {
       status: statusCatinWanita
     });
 
-    var url = this.urlMaster+'api/CatinWanita';
+    var url = this.urlMaster+'/api/CatinWanita';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -142,7 +143,7 @@ export class PernikahanServiceProvider {
       nomor_handphone: nomor_handphone
     });
 
-    var url = this.urlMaster+'api/Penghulus';
+    var url = this.urlMaster+'/api/Penghulus';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -174,7 +175,7 @@ export class PernikahanServiceProvider {
       tanggal: tanggal
     });
 
-    var url = this.urlMaster+'api/Nikahs';
+    var url = this.urlMaster+'/api/Nikahs';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -204,7 +205,7 @@ export class PernikahanServiceProvider {
       status: status
     });
 
-    var url = this.urlMaster+'api/Nikahs';
+    var url = this.urlMaster+'/api/Nikahs';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -212,19 +213,19 @@ export class PernikahanServiceProvider {
   }
 
   hapusNikah(id) {
-    var url = this.urlMaster+'api/Nikahs/'+id;
+    var url = this.urlMaster+'/api/Nikahs/'+id;
     var response = this.http.delete(url).map(res => res.json());
     return response;
   }
 
   hapusCatinPria(id) {
-    var url = this.urlMaster+'api/CatinPria/'+id;
+    var url = this.urlMaster+'/api/CatinPria/'+id;
     var response = this.http.delete(url).map(res => res.json());
     return response;
   }
 
   hapusCatinWanita(id) {
-    var url = this.urlMaster+'api/CatinWanita/'+id;
+    var url = this.urlMaster+'/api/CatinWanita/'+id;
     var response = this.http.delete(url).map(res => res.json());
     return response;
   }

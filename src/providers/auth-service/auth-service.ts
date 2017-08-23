@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Storage } from '@ionic/storage';
+import { BaseUrl } from "../base-url";
+import * as moment from "moment";
 import 'rxjs/add/operator/map';
 
 export class User {
@@ -21,48 +24,151 @@ export class User {
 */
 @Injectable()
 export class AuthServiceProvider {
+  urlMaster: string = BaseUrl.BASE_API_URL;
   currentUser: User;
 
-  // constructor(public http: Http) {
-  //   console.log('Hello AuthServiceProvider Provider');
-  // }
+  constructor(public http: Http, private storage: Storage) {
+    console.log('Hello AuthServiceProvider Provider');
+  }
 
   public login(credentials) {
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
-    } else {
-      return Observable.create(observer => {
-        // At this point make a request to your backend to make a real check!
-        let access = (credentials.password === "pass" && credentials.email === "email");
-        this.currentUser = new User('Simon', 'saimon@devdactic.com');
-        observer.next(access);
-        observer.complete();
+    }
+    else {
+      // At this point make a request to your backend to make a real check!
+      let headers = new Headers({
+        'Content-Type': 'application/json'
       });
+
+      let options = new RequestOptions({
+        headers: headers
+      });
+
+      let body = JSON.stringify({
+        email: credentials.email,
+        password: credentials.password
+      });
+
+      var url = this.urlMaster+'/api/Admins/login';
+      var response = this.http.post(url,body,options)
+        .map(res => res.json())
+        .timeout(5000);
+      return response;
+
+      // this.currentUser = new User('Simon', 'saimon@devdactic.com');
     }
   }
 
-  public register(credentials) {
-    if (credentials.email === null || credentials.password === null) {
-      return Observable.throw("Please insert credentials");
-    } else {
-      // At this point store the credentials to your backend!
-      return Observable.create(observer => {
-        observer.next(true);
-        observer.complete();
-      });
-    }
-  }
-
-  public getUserInfo() : User {
-    return this.currentUser;
-  }
-
-  public logout() {
-    return Observable.create(observer => {
-      this.currentUser = null;
-      observer.next(true);
-      observer.complete();
+  public register(credentials, token) {
+    // At this point make a request to your backend to make a real check!
+    let headers = new Headers({
+      'Content-Type': 'application/json'
     });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      nip: credentials.nip,
+      nama: credentials.nama,
+      username: credentials.username,
+      email: credentials.email,
+      password: credentials.password,
+      dob: moment(credentials.dob).toISOString(),
+      alamat: credentials.alamat,
+      pendidikan: credentials.pendidikan,
+      golongan: credentials.golongan
+    });
+    console.log(body);
+
+    var url = this.urlMaster+'/api/Admins?access_token='+token;
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
+  deleteUser(id, token) {
+    console.log(id);
+    var url = this.urlMaster+'/api/Admins/'+id+'?access_token='+token;
+    var response = this.http.delete(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  getUserInfo(currentLogedInUser) {
+    console.log(currentLogedInUser);
+    var url = this.urlMaster+'/api/Admins/'+currentLogedInUser.userId+'?filter={"include": ["roles"]}&access_token='+currentLogedInUser.token;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  checkStoredCredentials(currentLogedInUser) {
+    console.log(currentLogedInUser);
+    var url = this.urlMaster+'/api/Admins/'+currentLogedInUser.userId+'?access_token='+currentLogedInUser.token;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  getAdmins(token) {
+    var url = this.urlMaster+'/api/Admins?filter={"include": ["roles"]}&access_token='+token;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  getRoles(token) {
+    var url = this.urlMaster+'/api/Roles?access_token='+token;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  mapRoleToUser(id, roleId, token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      principalType: "USER",
+      principalId: id,
+      roleId: roleId
+    });
+
+    var url = this.urlMaster+'/api/RoleMappings?access_token='+token;
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
+  public logout(token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    var url = this.urlMaster+'/api/Admins/logout'+'?access_token='+token;
+    var response = this.http.post(url,options)
+      .map(res => res.json())
+      .timeout(5000);
+    return response;
   }
 
 }

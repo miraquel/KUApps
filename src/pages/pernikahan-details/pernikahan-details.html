@@ -31,7 +31,7 @@
       </button>
       <ion-item>
         <h2>Tanggal Nikah</h2>
-        <p>{{ tanggalNikah | date:"shortDate" }}</p>
+        <p>{{ tanggalNikah }}</p>
       </ion-item>
     </ion-item-group>
 
@@ -50,5 +50,7 @@
     </ion-item-group>
 
   </ion-list>
+
+<button *ngIf="idInvoice === null" ion-button full (click)="selesai()">Selesai</button>
 
 </ion-content>

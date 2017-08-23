@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams, Loading, AlertController, ViewController, LoadingController } from 'ionic-angular';
+import { Storage } from "@ionic/storage";
+import { AuthServiceProvider }  from "../../providers/auth-service/auth-service";
+import * as moment from 'moment';
 
 /**
  * Generated class for the ProfilePage page.
@@ -13,27 +16,115 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-  date = {
-    day: new Date().getDate().toString(),
-    month: new Date().getMonth().toString(),
-    year: new Date().getFullYear().toString()
+  loading: Loading;
+  currentLogedInUser = {
+    userId: '',
+    token:''
+  }
+  user = {
+    nip: '',
+    nama: '',
+    dob: '',
+    alamat: '',
+    pendidikan: '',
+    golongan: '',
+    email: '',
+    jabatan: ''
   }
 
   // today: string = this.date.year +"-"+ this.date.month +"-"+ this.date.day;
   today = new Date().toISOString();
 
-  public event = {
-    month: '1990-02-19',
-    timeStarts: '07:43',
-    timeEnds: '1990-02-20'
-  }
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private app: App,
+    private alertCtrl: AlertController,
+    private viewCtrl: ViewController,
+    private loadingCtrl: LoadingController,
+    private storage: Storage,
+    private authService: AuthServiceProvider
+  ) {
+    moment.locale('id');
+    this.showLoading();
+    this.storage.get('userId').then(
+      val => {
+        this.currentLogedInUser.userId = val;
+        this.storage.get('token').then(
+          val => {
+            this.currentLogedInUser.token = val;
+            this.getUser();
+          }
+        );
+      }
+    );
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
-    console.log(this.today);
+
+  }
+
+  getUser() {
+    this.authService.getUserInfo(this.currentLogedInUser)
+      .subscribe(
+        data => {
+          this.user.nip = data.nip;
+          this.user.nama = data.nama;
+          this.user.dob = moment(data.dob).format("DD MMMM YYYY");
+          this.user.alamat = data.alamat;
+          this.user.pendidikan = data.pendidikan;
+          this.user.golongan = data.golongan;
+          this.user.email = data.email;
+          this.user.jabatan = data.roles[0].name;
+          this.loading.dismiss();
+        },
+        error => {
+          this.loading.dismiss();
+          this.showError("Koneksi Error");
+          console.log(error);
+        }
+      );
+  }
+
+  logout() {
+    this.showLoading();
+    this.storage.ready().then(
+      success => {
+        this.storage.get('token').then(
+          token => {
+            this.authService.logout(token).subscribe(
+              success => {
+                this.storage.clear();
+                this.loading.dismiss();
+                this.app.getRootNav().setRoot("LoginPage");
+              },
+              error => {
+                this.showError("Koneksi Error");
+              }
+            );
+          }
+        );
+      }
+    );
+  }
+
+  showError(text) {
+    this.loading.dismiss();
+
+    let alert = this.alertCtrl.create({
+      title: 'Gagal',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Mohon Tunggu...',
+      dismissOnPageChange: true
+    });
+    this.loading.present();
   }
 
 }

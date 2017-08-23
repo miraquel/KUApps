@@ -35,19 +35,15 @@
   </ion-list-header>
   <ion-item-sliding *ngFor="let nikah of nikahs">
     <button ion-item (click)="LoadNikahDetails(nikah.id)">
-      <h2>{{ nikah.villages.name }}</h2>
-      <p>{{ nikah.catinPria.nama }}</p>
-      <p>{{ nikah.catinWanita.nama }}</p>
+      <h2>{{ nikah.village.name }}</h2>
+      <p>{{ nikah.catinpria.nama }}</p>
+      <p>{{ nikah.catinwanita.nama }}</p>
       <ion-note item-end>{{ nikah.tanggal | date:'shortDate' }}</ion-note>
     </button>
     <ion-item-options>
       <button ion-button color="danger" (click)="hapusNikahAlert(nikah.id)" icon-start>
         <ion-icon name="trash"></ion-icon>
         Hapus
-      </button>
-      <button ion-button color="primary" icon-start>
-        <ion-icon name="create"></ion-icon>
-        Edit
       </button>
     </ion-item-options>
   </ion-item-sliding>

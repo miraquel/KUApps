@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { BaseUrl } from "../base-url";
 import 'rxjs/add/operator/map';
 
 /*
@@ -10,68 +11,69 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class LokasiServiceProvider {
-  urlMaster: string = 'http://192.168.0.15:3000/';
+  urlMaster: string;
 
   constructor(public http: Http) {
     console.log('Hello LokasiServiceProvider Provider');
+    this.urlMaster = BaseUrl.BASE_API_URL;
   }
 
   ShowProvinsi(){
-    var url = this.urlMaster+'api/Provinces';
+    var url = this.urlMaster+'/api/Provinces';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowProvinsiById(provinsiId){
-    var url = this.urlMaster+'api/Provinces/'+provinsiId;
+    var url = this.urlMaster+'/api/Provinces/'+provinsiId;
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowProvinsiByKabupaten(kabupatenId){
-    var url = this.urlMaster+'api/Regencies/'+kabupatenId+'/province';
+    var url = this.urlMaster+'/api/Regencies/'+kabupatenId+'/province';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowKabupaten(provinsiId: number){
-    var url = this.urlMaster+'api/Provinces/'+provinsiId+'/regencies';
+    var url = this.urlMaster+'/api/Provinces/'+provinsiId+'/regencies';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowKabupatenById(kabupatenId){
-    var url = this.urlMaster+'api/Regencies/'+kabupatenId;
+    var url = this.urlMaster+'/api/Regencies/'+kabupatenId;
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowKabupatenByKecamatan(kecamatanId){
-    var url = this.urlMaster+'api/Districts/'+kecamatanId+'/regency';
+    var url = this.urlMaster+'/api/Districts/'+kecamatanId+'/regency';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowKecamatan(kabupatenId: number){
-    var url = this.urlMaster+'api/Regencies/'+kabupatenId+'/districts';
+    var url = this.urlMaster+'/api/Regencies/'+kabupatenId+'/districts';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowKecamatanById(kecamatanId: number){
-    var url = this.urlMaster+'api/Districts/'+kecamatanId;
+    var url = this.urlMaster+'/api/Districts/'+kecamatanId;
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowDesaByID(KecamatanId: number){
-    var url = this.urlMaster+'api/Districts/'+KecamatanId+'/villages';
+    var url = this.urlMaster+'/api/Districts/'+KecamatanId+'/villages';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
 
   ShowDesa(){
-    var url = this.urlMaster+'api/Villages';
+    var url = this.urlMaster+'/api/Villages';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }

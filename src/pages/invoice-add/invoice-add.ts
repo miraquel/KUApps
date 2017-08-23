@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { CurrencyPipe } from "@angular/common";
 
 /**
  * Generated class for the InvoiceAddPage page.
@@ -13,12 +14,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'invoice-add.html',
 })
 export class InvoiceAddPage {
+  invoice = {
+    noSlip: '',
+    bank: '',
+    tanggal: '',
+    nominal: ''
+  }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private currencyPipe: CurrencyPipe) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InvoiceAddPage');
+  }
+
+  convertNominal(val) {
+    console.log(val);
+    this.invoice.nominal = this.currencyPipe.transform(this.invoice.nominal, 'IDR', true);
   }
 
 }

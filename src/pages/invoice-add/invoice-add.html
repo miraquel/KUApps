@@ -8,11 +8,41 @@
 
   <ion-navbar>
     <ion-title>InvoiceAdd</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-list>
 
+    <ion-item>
+      <ion-label stacked>No. Slip</ion-label>
+      <ion-input type="text" [(ngModel)]="invoice.noSlip"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Bank</ion-label>
+      <ion-input type="text" [(ngModel)]="invoice.bank"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Tanggal</ion-label>
+      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="invoice.tanggal"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Nominal</ion-label>
+      <ion-input type="number" [(ngModel)]="invoice.nominal" (ngModelChange)="convertNominal($event)"></ion-input>
+    </ion-item>
+
+    <button ion-button full (click)="simpan()">Simpan Data</button>
+
+  </ion-list>
 </ion-content>

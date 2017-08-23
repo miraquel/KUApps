@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the LoginPage page.
@@ -17,10 +18,47 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 export class LoginPage {
   loading: Loading;
   registerCredentials = { email: '', password: '' };
+  currentLogedInUser = {
+    userId: '',
+    token:''
+  }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private screenOrientation: ScreenOrientation, private auth: AuthServiceProvider, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private screenOrientation: ScreenOrientation, private auth: AuthServiceProvider, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
     this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
   }
+
+  ionViewDidLoad() {
+    this.initCredentials();
+  }
+
+  initCredentials() {
+    this.storage.ready().then(
+      success => {
+        this.storage.get('userId').then(
+          val => {
+            if (val !== null) {
+              console.log(val);
+              this.currentLogedInUser.userId = val;
+              this.storage.get('token').then(
+                val => {
+                  this.currentLogedInUser.token = val;
+                  this.auth.checkStoredCredentials(this.currentLogedInUser)
+                  .subscribe(
+                    success => {
+                      this.navCtrl.setRoot('BerandaTabsPage');
+                    },
+                    error => {
+                      this.showError("Sesi anda telah berakhir, silahkan login kembali");
+                      this.storage.clear();
+                    }
+                  );
+                }
+              );
+            }
+          }
+        );
+      });
+    }
 
   public createAccount() {
     this.navCtrl.push('RegisterPage');
@@ -28,15 +66,23 @@ export class LoginPage {
 
   public login() {
     this.showLoading()
-    this.auth.login(this.registerCredentials).subscribe(allowed => {
-      if (allowed) {
+    this.auth.login(this.registerCredentials).subscribe(
+      success => {
         this.navCtrl.setRoot('BerandaTabsPage');
-      } else {
-        this.showError("Access Denied");
-      }
-    },
+        this.storage.set('userId', success.userId);
+        this.storage.set('token', success.id);
+        console.log(success);
+      },
       error => {
-        this.showError(error);
+        if (error.statusText === "Unauthorized") {
+          this.showError("Akses ditolak, email / password salah");
+          console.log(error);
+        }
+        else {
+          this.showError("Koneksi Error");
+          console.log(error);
+        }
+        this.loading.dismiss();
       });
   }
 
@@ -49,10 +95,8 @@ export class LoginPage {
   }
 
   showError(text) {
-    this.loading.dismiss();
-
     let alert = this.alertCtrl.create({
-      title: 'Fail',
+      title: 'Gagal',
       subTitle: text,
       buttons: ['OK']
     });
