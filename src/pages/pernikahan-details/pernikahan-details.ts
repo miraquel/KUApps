@@ -38,8 +38,10 @@ export class PernikahanDetailsPage {
     });
   }
 
-  loadInvoiceAdd() {
-    this.navCtrl.push('InvoiceAddPage');
+  loadInvoiceAdd(nikahId) {
+    this.navCtrl.push('InvoiceAddPage', {
+      nikahId
+    });
   }
 
   ionViewDidLoad() {

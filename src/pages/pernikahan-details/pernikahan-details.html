@@ -42,7 +42,7 @@
     <ion-item-group>
 
       <ion-item-divider color="light">Data Kelengkapan Pernikahan</ion-item-divider>
-      <button ion-item (click)="loadInvoiceAdd()">
+      <button ion-item (click)="loadInvoiceAdd(id)">
         <h2>Data Invoice</h2>
         <p>{{ statusInvoice }}</p>
       </button>
@@ -51,6 +51,6 @@
 
   </ion-list>
 
-<button *ngIf="idInvoice === null" ion-button full (click)="selesai()">Selesai</button>
+<button *ngIf="idInvoice !== null" ion-button full (click)="selesai()">Selesai</button>
 
 </ion-content>

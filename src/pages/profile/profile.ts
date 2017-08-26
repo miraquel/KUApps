@@ -29,6 +29,7 @@ export class ProfilePage {
     pendidikan: '',
     golongan: '',
     email: '',
+    username: '',
     jabatan: ''
   }
 
@@ -75,6 +76,7 @@ export class ProfilePage {
           this.user.pendidikan = data.pendidikan;
           this.user.golongan = data.golongan;
           this.user.email = data.email;
+          this.user.username = data.username;
           this.user.jabatan = data.roles[0].name;
           this.loading.dismiss();
         },
@@ -84,6 +86,12 @@ export class ProfilePage {
           console.log(error);
         }
       );
+  }
+
+  changePassword(currentLogedInUser: Array<any>) {
+    this.navCtrl.push("ProfileChangePasswordPage", {
+      currentLogedInUser
+    })
   }
 
   logout() {

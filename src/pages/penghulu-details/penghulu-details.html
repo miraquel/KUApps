@@ -23,7 +23,7 @@
 
     <ion-item>
       <h2>Tanggal Lahir</h2>
-      <p>{{ penghulu.tanggal_lahir | date:"dd MMMM yyyy" }}</p>
+      <p>{{ penghulu.tanggal_lahir }}</p>
     </ion-item>
 
     <ion-item>
@@ -38,17 +38,17 @@
 
     <ion-item>
       <h2>Provinsi</h2>
-      <p>{{ provinsi?.name }}</p>
+      <p>{{ penghulu.districts.regencies.provinces.name }}</p>
     </ion-item>
 
     <ion-item>
       <h2>Kabupaten</h2>
-      <p>{{ kabupaten?.name }}</p>
+      <p>{{ penghulu.districts.regencies.name }}</p>
     </ion-item>
 
     <ion-item>
       <h2>Kecamatan</h2>
-      <p>{{ kecamatan?.name }}</p>
+      <p>{{ penghulu.districts.name }}</p>
     </ion-item>
 
     <ion-item>

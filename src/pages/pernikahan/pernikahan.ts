@@ -15,6 +15,7 @@ import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pe
 })
 export class PernikahanPage {
   loading: Loading;
+  checkCallbackParams;
   nikahs: Array<any>;
 
   constructor(
@@ -44,8 +45,17 @@ export class PernikahanPage {
     );
   }
 
+  myCallbackFunction = (_params) => {
+    return new Promise((resolve, reject) => {
+      this.LoadNikah();
+      resolve();
+    });
+  }
+
   ShowPendaftaran(){
-    this.navCtrl.push("PendaftaranPage");
+    this.navCtrl.push("PendaftaranPage", {
+      callback: this.myCallbackFunction
+    });
   }
 
   LoadNikahDetails(id) {

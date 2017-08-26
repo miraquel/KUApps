@@ -17,7 +17,11 @@ import { Storage } from '@ionic/storage';
 })
 export class LoginPage {
   loading: Loading;
-  registerCredentials = { email: '', password: '' };
+  userType = 'username';
+  _email;
+  _username;
+  _password;
+  registerCredentials;
   currentLogedInUser = {
     userId: '',
     token:''
@@ -65,8 +69,20 @@ export class LoginPage {
   }
 
   public login() {
-    this.showLoading()
-    this.auth.login(this.registerCredentials).subscribe(
+    this.showLoading();
+    if (this.userType === "email") {
+        this.registerCredentials = {
+          email: this._email,
+          password: this._password
+        }
+    }
+    else if (this.userType === "username") {
+        this.registerCredentials = {
+          username: this._username,
+          password: this._password
+        }
+    }
+    this.auth.login(this.registerCredentials, this.userType).subscribe(
       success => {
         this.navCtrl.setRoot('BerandaTabsPage');
         this.storage.set('userId', success.userId);

@@ -1,5 +1,5 @@
 <!--
-  Generated template for the AddPenghuluPage page.
+  Generated template for the PenghuluEditPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,15 +7,13 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Tambah Penghulu</ion-title>
-
+    <ion-title>Edit Data Penghulu</ion-title>
     <ion-buttons start>
       <button ion-button (click)="dismiss()">
         <span ion-text color="primary" showWhen="ios">Cancel</span>
         <ion-icon name="close" showWhen="android,windows"></ion-icon>
       </button>
     </ion-buttons>
-
   </ion-navbar>
 
 </ion-header>
@@ -27,22 +25,22 @@
 
     <ion-item>
       <ion-label stacked>Nama</ion-label>
-      <ion-input type="text" [(ngModel)]="nama"></ion-input>
+      <ion-input type="text" [(ngModel)]="penghulu.nama"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Tanggal Lahir</ion-label>
-      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahir"></ion-datetime>
+      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="penghulu.tanggal_lahir"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Nomor KTP</ion-label>
-      <ion-input type="text" [(ngModel)]="noKTP"></ion-input>
+      <ion-input type="text" [(ngModel)]="penghulu.no_ktp"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Alamat</ion-label>
-      <ion-input type="text" [(ngModel)]="alamat"></ion-input>
+      <ion-input type="text" [(ngModel)]="penghulu.alamat"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -54,21 +52,21 @@
 
     <ion-item>
       <ion-label stacked>Kabupaten</ion-label>
-      <ion-select [(ngModel)]="kabupatenSelect" (ionChange)="LoadKecamatan()" [disabled]="KabupatenDisableSelector">
+      <ion-select [(ngModel)]="kabupatenSelect" (ionChange)="LoadKecamatan()">
         <ion-option *ngFor="let kabupaten of kabupatens" [value]="kabupaten.id">{{ kabupaten.name }}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Kecamatan</ion-label>
-      <ion-select [(ngModel)]="kecamatanSelect" [disabled]="KecamatanDisableSelector">
+      <ion-select [(ngModel)]="kecamatanSelect">
         <ion-option *ngFor="let kecamatan of kecamatans" [value]="kecamatan.id">{{ kecamatan.name }}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Agama</ion-label>
-      <ion-select [(ngModel)]="agama">
+      <ion-select [(ngModel)]="penghulu.agama">
         <ion-option value="Islam">Islam</ion-option>
         <ion-option value="Kristen">Kristen</ion-option>
         <ion-option value="Buddha">Buddha</ion-option>
@@ -79,7 +77,7 @@
 
     <ion-item>
       <ion-label stacked>Pendidikan</ion-label>
-      <ion-select [(ngModel)]="pendidikan">
+      <ion-select [(ngModel)]="penghulu.pendidikan">
         <ion-option value="SD">SD</ion-option>
         <ion-option value="SMP">SMP</ion-option>
         <ion-option value="SMA">SMA</ion-option>
@@ -92,10 +90,10 @@
 
     <ion-item>
       <ion-label stacked>Nomor Handphone</ion-label>
-      <ion-input type="text" [(ngModel)]="nomorHP"></ion-input>
+      <ion-input type="text" [(ngModel)]="penghulu.nomor_handphone"></ion-input>
     </ion-item>
 
-    <button ion-button full (click)="Simpan()">Simpan Data</button>
+    <button ion-button full (click)="updatePenghulu()">Simpan Data</button>
 
   </ion-list>
 

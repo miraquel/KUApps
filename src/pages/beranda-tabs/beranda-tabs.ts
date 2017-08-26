@@ -14,7 +14,7 @@ import { IonicPage, NavController } from 'ionic-angular';
 @IonicPage()
 export class BerandaTabsPage {
 
-  berandaRoot = 'BerandaPage'
+  pernikahanRoot = 'PernikahanPage'
   FileMasterRoot = 'FileMasterPage'
   ProfileRoot = 'ProfilePage'
 

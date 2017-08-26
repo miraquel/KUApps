@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController, LoadingController, Loading, AlertController } from 'ionic-angular';
 import { LokasiServiceProvider } from "../../providers/lokasi-service/lokasi-service";
 import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pernikahan-service";
+import { Storage } from "@ionic/storage";
 
 /**
  * Generated class for the AddPenghuluPage page.
@@ -15,6 +16,7 @@ import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pe
   templateUrl: 'add-penghulu.html',
 })
 export class AddPenghuluPage {
+  token;
   provinsiSelect;
   kabupatenSelect;
   kecamatanSelect;
@@ -41,8 +43,15 @@ export class AddPenghuluPage {
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
+    private storage: Storage,
     private lokasiService: LokasiServiceProvider,
-    private pernikahanService: PernikahanServiceProvider) {
+    private pernikahanService: PernikahanServiceProvider
+  ) {
+    this.storage.get("token").then(
+      token => {
+        this.token = token;
+      }
+    )
   }
 
   showLoading(){
@@ -88,7 +97,8 @@ export class AddPenghuluPage {
       this.alamat,
       this.agama,
       this.pendidikan,
-      this.nomorHP
+      this.nomorHP,
+      this.token
     ).then(
       success => {
         if (success) {

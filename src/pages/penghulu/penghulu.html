@@ -26,9 +26,23 @@
   </ion-refresher>
 
   <ion-list>
-    <button ion-item *ngFor="let penghulu of penghulus" (click)="ShowDetails(penghulu.id)">
-      {{ penghulu.nama }}
-    </button>
+    <ion-item-sliding *ngFor="let penghulu of penghulus">
+      <button ion-item (click)="ShowDetails(penghulu)">
+        <h1>{{ penghulu.nama }}</h1>
+        <h2>{{ penghulu.nomor_handphone }}</h2>
+        <h3>{{ penghulu.alamat }}</h3>
+      </button>
+      <ion-item-options>
+        <button ion-button color="primary" (click)="editPenghulu(penghulu)" icon-start>
+          <ion-icon name="clipboard"></ion-icon>
+          edit
+        </button>
+        <button ion-button color="danger" (click)="hapusPenghuluKonfirmasi(penghulu.id)" icon-start>
+          <ion-icon name="trash"></ion-icon>
+          Hapus
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
   <ion-fab right bottom>

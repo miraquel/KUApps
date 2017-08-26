@@ -75,6 +75,16 @@ export class AdminPage {
     });
   }
 
+  edit(admin: Array<any>) {
+    console.log(admin);
+    let modal = this.modalCtrl.create('AdminEditPage', { admin });
+    modal.present();
+    modal.onDidDismiss(data => {
+      console.log('Modal Dismiss Value :'+data);
+      this.loadAdmin();
+    });
+  }
+
   delete(id) {
     this.showLoading();
     this.storage.ready().then(

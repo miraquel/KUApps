@@ -31,7 +31,7 @@ export class AuthServiceProvider {
     console.log('Hello AuthServiceProvider Provider');
   }
 
-  public login(credentials) {
+  public login(credentials, userType) {
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
     }
@@ -45,10 +45,20 @@ export class AuthServiceProvider {
         headers: headers
       });
 
-      let body = JSON.stringify({
-        email: credentials.email,
-        password: credentials.password
-      });
+      let body;
+      
+      if (userType === "username") {
+        body = JSON.stringify({
+          username: credentials.username,
+          password: credentials.password
+        });
+      }
+      else if (userType === "email") {
+        body = JSON.stringify({
+          email: credentials.email,
+          password: credentials.password
+        });
+      }
 
       var url = this.urlMaster+'/api/Admins/login';
       var response = this.http.post(url,body,options)
@@ -90,12 +100,61 @@ export class AuthServiceProvider {
     return response;
   }
 
+  changePassword(password, token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      oldPassword: password.oldPassword,
+      newPassword: password.newPassword
+    });
+
+    var url = this.urlMaster+'/api/Admins/change-password?access_token='+token;
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
   deleteUser(id, token) {
     console.log(id);
     var url = this.urlMaster+'/api/Admins/'+id+'?access_token='+token;
     var response = this.http.delete(url)
       .map(rs => rs.json())
       .timeout(5000);
+    return response;
+  }
+
+  editUser(admin, token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      nip: admin.nip,
+      nama: admin.nama,
+      dob: admin.dob,
+      alamat: admin.alamat,
+      pendidikan: admin.pendidikan,
+      golongan: admin.golongan,
+      username: admin.username,
+      email: admin.email,
+      password: admin.password
+    });
+
+    var url = this.urlMaster+'/api/Admins/'+admin.id+'?access_token='+token;
+    var response = this.http.put(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
     return response;
   }
 
@@ -118,7 +177,7 @@ export class AuthServiceProvider {
   }
 
   getAdmins(token) {
-    var url = this.urlMaster+'/api/Admins?filter={"include": ["roles"]}&access_token='+token;
+    var url = this.urlMaster+'/api/Admins?filter={"include": "roles"}&access_token='+token;
     var response = this.http.get(url)
       .map(rs => rs.json())
       .timeout(5000);
@@ -149,6 +208,26 @@ export class AuthServiceProvider {
     });
 
     var url = this.urlMaster+'/api/RoleMappings?access_token='+token;
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
+  updateUserRole(id, roleId, token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      roleId: roleId
+    });
+
+    var url = this.urlMaster+'/api/RoleMappings/update?where={"principalId":'+id+'}&access_token='+token;
     var response = this.http.post(url,body,options)
     .map(res => res.json())
     .timeout(5000);

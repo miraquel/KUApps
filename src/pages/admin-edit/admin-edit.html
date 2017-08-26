@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Tambah Admin</ion-title>
+    <ion-title>Edit Admin</ion-title>
     <ion-buttons start>
       <button ion-button (click)="dismiss()">
         <span ion-text color="primary" showWhen="ios">Cancel</span>
@@ -23,54 +23,54 @@
 
     <ion-item>
       <ion-label stacked>NIP</ion-label>
-      <ion-input type="text" [(ngModel)]="user.nip"></ion-input>
+      <ion-input type="text" [(ngModel)]="admin.nip"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Jabatan</ion-label>
-      <ion-select [(ngModel)]="user.jabatan">
+      <ion-select [(ngModel)]="admin.roles[0].id">
         <ion-option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Nama</ion-label>
-      <ion-input type="text" [(ngModel)]="user.nama"></ion-input>
+      <ion-input type="text" [(ngModel)]="admin.nama"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Username</ion-label>
-      <ion-input type="text" [(ngModel)]="user.username"></ion-input>
+      <ion-input type="text" [(ngModel)]="admin.username"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Email</ion-label>
-      <ion-input type="text" [(ngModel)]="user.email"></ion-input>
+      <ion-input type="text" [(ngModel)]="admin.email"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Password</ion-label>
-      <ion-input type="Password" [(ngModel)]="user.password"></ion-input>
+      <ion-input type="Password" placeholder="Masukkan Password" [(ngModel)]="admin.password"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Verifikasi Password</ion-label>
-      <ion-input type="Password" [(ngModel)]="passwordDummy"></ion-input>
+      <ion-input type="Password" placeholder="ulangi password di atas" [(ngModel)]="passwordDummy"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Tanggal Lahir</ion-label>
-      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="user.dob"></ion-datetime>
+      <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="admin.dob"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Alamat</ion-label>
-      <ion-input type="text" [(ngModel)]="user.alamat"></ion-input>
+      <ion-input type="text" [(ngModel)]="admin.alamat"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Pendidikan</ion-label>
-      <ion-select [(ngModel)]="user.pendidikan">
+      <ion-select [(ngModel)]="admin.pendidikan">
         <ion-option value="SD">SD</ion-option>
         <ion-option value="SMP">SMP</ion-option>
         <ion-option value="SMA">SMA</ion-option>
@@ -82,7 +82,7 @@
 
     <ion-item>
       <ion-label stacked>Golongan</ion-label>
-      <ion-select [(ngModel)]="user.golongan">
+      <ion-select [(ngModel)]="admin.golongan">
         <ion-option value="Golongan I">Golongan I</ion-option>
         <ion-option value="Golongan II">Golongan II</ion-option>
         <ion-option value="Golongan III">Golongan III</ion-option>
@@ -90,7 +90,7 @@
       </ion-select>
     </ion-item>
 
-    <button ion-button full (click)="simpan()">Simpan Data</button>
+    <button ion-button full (click)="edit()">Simpan Data</button>
 
   </ion-list>
 </ion-content>

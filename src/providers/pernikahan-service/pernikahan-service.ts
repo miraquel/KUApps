@@ -19,7 +19,7 @@ export class PernikahanServiceProvider {
   }
 
   ShowPenghulu(){
-    var url = this.urlMaster+'/api/Penghulus';
+    var url = this.urlMaster+'/api/Penghulus?filter={"include":{"districts":{"regencies":"provinces"}}}';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
@@ -27,6 +27,38 @@ export class PernikahanServiceProvider {
   ShowPenghuluDetails(penghuluId: number){
     var url = this.urlMaster+'/api/Penghulus/'+penghuluId;
     var response = this.http.get(url).map(res => res.json());
+    return response;
+  }
+
+  hapusPenghulu(penghuluId, token) {
+    var url = this.urlMaster+'/api/Penghulus/'+penghuluId+'?access_token='+token;
+    var response = this.http.delete(url).map(res => res.json());
+    return response;
+  }
+
+  editPenghulu(penghulu, token) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      nama: penghulu.nama,
+      tanggal_lahir: penghulu.tanggal_lahir,
+      no_ktp: penghulu.no_ktp,
+      alamat: penghulu.alamat,
+      agama: penghulu.agama,
+      pendidikan: penghulu.pendidikan,
+      nomor_handphone: penghulu.nomor_handphone,
+      districtId: penghulu.districtId
+    });
+
+    var url = this.urlMaster+'/api/Penghulus/'+penghulu.id+'?access_token='+token;;
+    var response = this.http.put(url,body,options)
+    .map(res => res.json(), this.handleError);
     return response;
   }
 
@@ -122,7 +154,8 @@ export class PernikahanServiceProvider {
     alamat,
     agama,
     pendidikan,
-    nomor_handphone
+    nomor_handphone,
+    token
   ){
     let headers = new Headers({
       'Content-Type': 'application/json'
@@ -143,7 +176,7 @@ export class PernikahanServiceProvider {
       nomor_handphone: nomor_handphone
     });
 
-    var url = this.urlMaster+'/api/Penghulus';
+    var url = this.urlMaster+'/api/Penghulus?access_token='+token;
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -182,13 +215,7 @@ export class PernikahanServiceProvider {
     return response;
   }
 
-  SimpanInvoice(
-    no_slip,
-    bank,
-    tanggal,
-    nominal,
-    status
-  ) {
+  SimpanInvoice(invoice) {
     let headers = new Headers({
       'Content-Type': 'application/json'
     });
@@ -198,17 +225,35 @@ export class PernikahanServiceProvider {
     });
 
     let body = JSON.stringify({
-      no_slip: no_slip,
-      bank: bank,
-      tanggal: tanggal,
-      nominal: nominal,
-      status: status
+      no_slip: invoice.noSlip,
+      bank: invoice.bank,
+      tanggal: invoice.tanggal,
+      nominal: invoice.nominal,
+      status: invoice.status
     });
 
-    var url = this.urlMaster+'/api/Nikahs';
+    var url = this.urlMaster+'/api/Invoices';
     var response = this.http.post(url,body,options)
-    .toPromise()
-    .then(res => res.json(), this.handleError);
+      .map(res => res.json(), this.handleError);
+    return response;
+  }
+
+  updateNikahInvoice(invoiceId, nikahId) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      invoiceId: invoiceId
+    });
+
+    var url = this.urlMaster+'/api/Nikahs/'+nikahId;
+    var response = this.http.patch(url,body,options)
+      .map(res => res.json(), this.handleError);
     return response;
   }
 

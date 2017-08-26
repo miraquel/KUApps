@@ -15,6 +15,7 @@ import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pe
   templateUrl: 'pendaftaran.html',
 })
 export class PendaftaranPage {
+  callback;
   loading: Loading;
   bool: boolean = false;
   pageReview: boolean = true;
@@ -88,7 +89,7 @@ export class PendaftaranPage {
     private lokasiService: LokasiServiceProvider,
     private pernikahanService: PernikahanServiceProvider
   ){
-    //
+    this.callback = this.navParams.get("callback");
   }
 
   next(){
@@ -223,7 +224,7 @@ export class PendaftaranPage {
           text: 'Ya',
           handler: () => {
             this.bool = true;
-            this.viewCtrl.dismiss();
+            this.dismiss();
           }
         },
         {
@@ -440,7 +441,7 @@ export class PendaftaranPage {
         if (success) {
           this.showToast("Data Nikah Berhasil Disimpan");
           this.bool = true;
-          this.viewCtrl.dismiss();
+          this.dismiss();
         }
         else {
           this.showToast('Simpan Data Gagal, Hubungi Admin Untuk Info Lebih Lanjut');
@@ -459,6 +460,12 @@ export class PendaftaranPage {
       dismissOnPageChange: true
     });
     this.loading.present();
+  }
+
+  dismiss() {
+    this.callback(true).then(()=>{
+      this.navCtrl.pop();
+    });
   }
 
   ionViewDidLoad() {

@@ -12,13 +12,24 @@
       <ion-row>
         <ion-col>
           <ion-list inset>
-
+            <ion-row>
+              <ion-col col-7 class="user-input-col">
+                <ion-item>
+                  <ion-input *ngIf="userType === 'email'" class="user-input-field" type="text" placeholder="Email" name="email" [(ngModel)]="_email" required></ion-input>
+                  <ion-input *ngIf="userType === 'username'" class="user-input-field" type="text" placeholder="Username" name="username" [(ngModel)]="_username" required></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col col-5>
+                <ion-item>
+                  <ion-select interface="popover" class="user-type-select" [ngModelOptions]="{standalone: true}" [(ngModel)]="userType">
+                    <ion-option value="username">username</ion-option>
+                    <ion-option value="email">email</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
             <ion-item>
-              <ion-input type="text" placeholder="Email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
+              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="_password" required></ion-input>
             </ion-item>
 
           </ion-list>
