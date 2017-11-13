@@ -13,25 +13,29 @@
 
     <ion-item-group>
       <ion-item-divider color="light">Data Pernikahan</ion-item-divider>
-      <ion-item>
+      <button ion-item (click)="loadCatinPriaDetails(nikah.catinpria)">
         <h2>Nama Calon Pengantin Pria</h2>
-        <p>{{ namaCatinPria }}</p>
-      </ion-item>
-      <ion-item>
+        <p>{{ nikah.catinpria.nama }}</p>
+      </button>
+      <button ion-item (click)="loadCatinWanitaDetails(nikah.catinwanita)">
         <h2>Nama Calong Pengantin Wanita</h2>
-        <p>{{ namaCatinWanita }}</p>
-      </ion-item>
+        <p>{{ nikah.catinwanita.nama }}</p>
+      </button>
       <ion-item>
         <h2>Desa</h2>
-        <p>{{ desa }}</p>
+        <p>{{ nikah.village.name }}</p>
       </ion-item>
-      <button ion-item (click)="loadPenghuluDetails(idPenghulu)">
+      <button *ngIf="penghuluExist" ion-item (click)="loadPenghuluDetails(nikah.penghulu)">
         <h2>Penghulu</h2>
-        <p>{{ namaPenghulu }}</p>
+        <p>{{ nikah.penghulu.nama }}</p>
+      </button>
+      <button *ngIf="!penghuluExist" ion-item (click)="assignPenghulu()">
+        <h2>Penghulu</h2>
+        <p>Tambahkan Penghulu</p>
       </button>
       <ion-item>
         <h2>Tanggal Nikah</h2>
-        <p>{{ tanggalNikah }}</p>
+        <p>{{ nikah.tanggal | date:'d MMMM y' }}</p>
       </ion-item>
     </ion-item-group>
 
@@ -42,15 +46,36 @@
     <ion-item-group>
 
       <ion-item-divider color="light">Data Kelengkapan Pernikahan</ion-item-divider>
-      <button ion-item (click)="loadInvoiceAdd(id)">
+      <button ion-item *ngIf="!invoiceView" (click)="loadInvoiceEdit(nikah.invoice, nikah.id)">
         <h2>Data Invoice</h2>
-        <p>{{ statusInvoice }}</p>
+        <p>{{ nikah.invoice.no_invoice }}</p>
+        <p>{{ nikah.invoice.tanggal | date:'d MMMM y' }}</p>
+        <p>{{ nikah.invoice.tanggal_jatuh_tempo | date:'d MMMM y' }}</p>
+        <p>{{ nikah.invoice.nominal | currency: 'IDR':true:'4.2-2' }}</p>
+        <p>{{ nikah.invoice.status }}</p>
+      </button>
+      <button ion-item *ngIf="invoiceView" (click)="loadInvoiceAdd(nikah.id)">
+        <h2>Data Invoice</h2>
+        <p>Data Belum Diinput</p>
+      </button>
+
+      <button ion-item *ngIf="!penlengkapExist" (click)="AddPelengkapModal(nikah.id)">
+        <h2>No. Akta &amp; No. Porporasi</h2>
+        <p>Data Belum Diinput</p>
+      </button>
+
+      <button ion-item *ngIf="penlengkapExist" (click)="AddPelengkapModal(nikah.id)">
+        <h2>No. Akta</h2>
+        <p>{{ nikah.no_akta }}</p>
+        <br>
+        <h2>No. Porporasi</h2>
+        <p>{{ nikah.no_porporasi }}</p>
       </button>
 
     </ion-item-group>
 
   </ion-list>
 
-<button *ngIf="idInvoice !== null" ion-button full (click)="selesai()">Selesai</button>
+<button *ngIf="invoiceView" ion-button full (click)="selesai()">Selesai</button>
 
 </ion-content>

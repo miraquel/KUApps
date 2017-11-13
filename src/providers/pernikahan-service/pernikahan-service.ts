@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { BaseUrl } from "../base-url";
+import { AuthServiceProvider } from "../auth-service/auth-service";
 import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 
@@ -14,7 +15,10 @@ import 'rxjs/Rx';
 export class PernikahanServiceProvider {
   urlMaster: string = BaseUrl.BASE_API_URL;
 
-  constructor(public http: Http) {
+  constructor(
+    public http: Http,
+    private authService: AuthServiceProvider
+  ) {
     console.log('Hello PernikahanServiceProvider Provider');
   }
 
@@ -63,7 +67,7 @@ export class PernikahanServiceProvider {
   }
 
   ShowNikah() {
-    var url = this.urlMaster+'/api/Nikahs?filter={"include": ["catinpria","catinwanita","penghulu","village","invoice"]}';
+    var url = this.urlMaster+'/api/Nikahs?filter={"include": [{"catinpria":{"districts":{"regencies":"provinces"}}},{"catinwanita":{"districts":{"regencies":"provinces"}}},{"penghulu":{"districts":{"regencies":"provinces"}}},"village","invoice"]}';
     var response = this.http.get(url).map(res => res.json());
     return response;
   }
@@ -74,8 +78,16 @@ export class PernikahanServiceProvider {
     return response;
   }
 
+  ShowNikahByPendaftar() {
+    var url = this.urlMaster+'/api/Nikahs/findOne?filter={"include": [{"catinpria":{"districts":{"regencies":"provinces"}}},{"catinwanita":{"districts":{"regencies":"provinces"}}},{"penghulu":{"districts":{"regencies":"provinces"}}},"village",{"invoice":"pembayarans"}], "where": {"pendaftarId":'+this.authService.accessToken.userId+'}}&access_token='+this.authService.accessToken.id;
+    var response = this.http.get(url).map(res => res.json());
+    return response;
+  }
+
   SimpanCatinPria(
     districtIdCatinPria,
+    noKtpCatinPria,
+    urlKtpCatinPria,
     namaCatinPria,
     tanggalLahirCatinPria,
     agamaCatinPria,
@@ -94,6 +106,8 @@ export class PernikahanServiceProvider {
 
     let body = JSON.stringify({
       districtId: districtIdCatinPria,
+      no_ktp: noKtpCatinPria,
+      url_ktp: 'api/Attachments/'+urlKtpCatinPria.result.files.file[0].container+'/download/'+urlKtpCatinPria.result.files.file[0].name,
       nama: namaCatinPria,
       tanggal_lahir: tanggalLahirCatinPria,
       agama: agamaCatinPria,
@@ -103,15 +117,45 @@ export class PernikahanServiceProvider {
       status: statusCatinPria
     });
 
-    var url = this.urlMaster+'/api/CatinPria';
+    var url = this.urlMaster+'/api/catinPria';
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
     return response;
   }
 
+  // EditCatinPria(catinPria){
+  //   let headers = new Headers({
+  //     'Content-Type': 'application/json'
+  //   });
+  //
+  //   let options = new RequestOptions({
+  //     headers: headers
+  //   });
+  //
+  //   let body = JSON.stringify({
+  //     districtId: catinPria.districtId,
+  //     no_ktp: catinPria.no_ktp,
+  //     url_ktp: 'api/Attachments/'+urlKtpCatinPria.result.files.file[0].container+'/download/'+urlKtpCatinPria.result.files.file[0].name,
+  //     nama: namaCatinPria,
+  //     tanggal_lahir: tanggalLahirCatinPria,
+  //     agama: agamaCatinPria,
+  //     pekerjaan: pekerjaanCatinPria,
+  //     alamat: alamatCatinPria,
+  //     wali_nikah: wali_nikahCatinPria,
+  //     status: statusCatinPria
+  //   });
+  //
+  //   var url = this.urlMaster+'/api/catinPria';
+  //   var response = this.http.put(url,body,options)
+  //     .map(res => res.json(), this.handleError);
+  //   return response;
+  // }
+
   SimpanCatinWanita(
     districtIdCatinWanita,
+    noKtpCatinWanita,
+    urlKtpCatinWanita,
     namaCatinWanita,
     tanggalLahirCatinWanita,
     agamaCatinWanita,
@@ -130,6 +174,8 @@ export class PernikahanServiceProvider {
 
     let body = JSON.stringify({
       districtId: districtIdCatinWanita,
+      no_ktp: noKtpCatinWanita,
+      url_ktp: 'api/Attachments/'+urlKtpCatinWanita.result.files.file[0].container+'/download/'+urlKtpCatinWanita.result.files.file[0].name,
       nama: namaCatinWanita,
       tanggal_lahir: tanggalLahirCatinWanita,
       agama: agamaCatinWanita,
@@ -188,7 +234,6 @@ export class PernikahanServiceProvider {
     catinwanitaId,
     adminId,
     villageId,
-    penghuluId,
     tanggal
   ) {
     let headers = new Headers({
@@ -204,11 +249,10 @@ export class PernikahanServiceProvider {
       catinwanitaId: catinwanitaId,
       adminId: adminId,
       villageId: villageId,
-      penghuluId: penghuluId,
       tanggal: tanggal
     });
 
-    var url = this.urlMaster+'/api/Nikahs';
+    var url = this.urlMaster+'/api/Pendaftars/'+this.authService.accessToken.userId+'/nikahs?access_token='+this.authService.accessToken.id;
     var response = this.http.post(url,body,options)
     .toPromise()
     .then(res => res.json(), this.handleError);
@@ -238,6 +282,29 @@ export class PernikahanServiceProvider {
     return response;
   }
 
+  UpdateInvoice(invoice, id) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify({
+      no_slip: invoice.no_slip,
+      bank: invoice.bank,
+      tanggal: invoice.tanggal,
+      nominal: invoice.nominal,
+      status: invoice.status
+    });
+
+    var url = this.urlMaster+'/api/Invoices/'+id;
+    var response = this.http.put(url,body,options)
+      .map(res => res.json(), this.handleError);
+    return response;
+  }
+
   updateNikahInvoice(invoiceId, nikahId) {
     let headers = new Headers({
       'Content-Type': 'application/json'
@@ -250,6 +317,23 @@ export class PernikahanServiceProvider {
     let body = JSON.stringify({
       invoiceId: invoiceId
     });
+
+    var url = this.urlMaster+'/api/Nikahs/'+nikahId;
+    var response = this.http.patch(url,body,options)
+      .map(res => res.json(), this.handleError);
+    return response;
+  }
+
+  updateNikahStatus(status, nikahId) {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify(status);
 
     var url = this.urlMaster+'/api/Nikahs/'+nikahId;
     var response = this.http.patch(url,body,options)

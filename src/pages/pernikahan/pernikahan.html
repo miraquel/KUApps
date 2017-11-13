@@ -34,7 +34,7 @@
     Daftar Pernikahan
   </ion-list-header>
   <ion-item-sliding *ngFor="let nikah of nikahs">
-    <button ion-item (click)="LoadNikahDetails(nikah.id)">
+    <button ion-item (click)="LoadNikahDetails(nikah)">
       <h2>{{ nikah.village.name }}</h2>
       <p>{{ nikah.catinpria.nama }}</p>
       <p>{{ nikah.catinwanita.nama }}</p>
@@ -48,9 +48,5 @@
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
-
-<ion-fab right bottom>
-  <button ion-fab color="default" (click)="ShowPendaftaran()"><ion-icon name="person-add"></ion-icon></button>
-</ion-fab>
 
 </ion-content>

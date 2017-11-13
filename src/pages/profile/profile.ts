@@ -17,21 +17,7 @@ import * as moment from 'moment';
 })
 export class ProfilePage {
   loading: Loading;
-  currentLogedInUser = {
-    userId: '',
-    token:''
-  }
-  user = {
-    nip: '',
-    nama: '',
-    dob: '',
-    alamat: '',
-    pendidikan: '',
-    golongan: '',
-    email: '',
-    username: '',
-    jabatan: ''
-  }
+  user;
 
   // today: string = this.date.year +"-"+ this.date.month +"-"+ this.date.day;
   today = new Date().toISOString();
@@ -46,61 +32,25 @@ export class ProfilePage {
     private storage: Storage,
     private authService: AuthServiceProvider
   ) {
-    moment.locale('id');
-    this.showLoading();
-    this.storage.get('userId').then(
-      val => {
-        this.currentLogedInUser.userId = val;
-        this.storage.get('token').then(
-          val => {
-            this.currentLogedInUser.token = val;
-            this.getUser();
-          }
-        );
-      }
-    );
+    this.user = this.authService.user
+    console.log(this.user)
   }
 
   ionViewDidLoad() {
-
+    //
   }
 
-  getUser() {
-    this.authService.getUserInfo(this.currentLogedInUser)
-      .subscribe(
-        data => {
-          this.user.nip = data.nip;
-          this.user.nama = data.nama;
-          this.user.dob = moment(data.dob).format("DD MMMM YYYY");
-          this.user.alamat = data.alamat;
-          this.user.pendidikan = data.pendidikan;
-          this.user.golongan = data.golongan;
-          this.user.email = data.email;
-          this.user.username = data.username;
-          this.user.jabatan = data.roles[0].name;
-          this.loading.dismiss();
-        },
-        error => {
-          this.loading.dismiss();
-          this.showError("Koneksi Error");
-          console.log(error);
-        }
-      );
-  }
-
-  changePassword(currentLogedInUser: Array<any>) {
-    this.navCtrl.push("ProfileChangePasswordPage", {
-      currentLogedInUser
-    })
+  changePassword() {
+    this.navCtrl.push("ProfileChangePasswordPage");
   }
 
   logout() {
     this.showLoading();
     this.storage.ready().then(
       success => {
-        this.storage.get('token').then(
-          token => {
-            this.authService.logout(token).subscribe(
+        this.storage.get('user').then(
+          user => {
+            this.authService.adminLogout(user.id).subscribe(
               success => {
                 this.storage.clear();
                 this.loading.dismiss();

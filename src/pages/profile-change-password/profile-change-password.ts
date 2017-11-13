@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, ToastController, ViewController } from 'ionic-angular';
 import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
+import { Storage } from "@ionic/storage";
 
 /**
  * Generated class for the ProfileChangePasswordPage page.
@@ -15,10 +16,6 @@ import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
 })
 export class ProfileChangePasswordPage {
   loading: Loading;
-  currentLogedInUser = {
-    userId: '',
-    token: '',
-  }
   password = {
     oldPassword: '',
     newPassword: ''
@@ -31,9 +28,9 @@ export class ProfileChangePasswordPage {
     private loadingCtrl: LoadingController,
     private viewCtrl: ViewController,
     private toastCtrl: ToastController,
+    private storage: Storage,
     private authService: AuthServiceProvider
   ) {
-    this.currentLogedInUser = this.navParams.get("currentLogedInUser");
   }
 
   ionViewDidLoad() {
@@ -48,17 +45,36 @@ export class ProfileChangePasswordPage {
       this.showToast("Konfirmasi password tidak sama dengan password baru, harap samakan keduanya")
     }
     else {
-      this.showLoading();
-      this.authService.changePassword(this.password, this.currentLogedInUser.token).subscribe(
-        success => {
-          this.showToast("Password berhasil dirubah");
-          this.dismiss();
-        },
-        error => {
-          this.showToast("koneksi error, password gagal dirubah");
-          this.loading.dismiss();
+      this.storage.get('user').then(
+        user => {
+          if (user.principalType === "Admin") {
+            this.showLoading();
+            this.authService.adminChangePassword(this.password).subscribe(
+              success => {
+                this.showToast("Password berhasil dirubah");
+                this.dismiss();
+              },
+              error => {
+                this.showToast("koneksi error, password gagal dirubah");
+                this.loading.dismiss();
+              }
+            );
+          }
+          else if (user.principalType === "Pendaftar") {
+            this.showLoading();
+            this.authService.pendaftarChangePassword(this.password).subscribe(
+              success => {
+                this.showToast("Password berhasil dirubah");
+                this.dismiss();
+              },
+              error => {
+                this.showToast("koneksi error, password gagal dirubah");
+                this.loading.dismiss();
+              }
+            );
+          }
         }
-      );
+      )
     }
   }
 

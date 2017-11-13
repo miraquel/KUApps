@@ -1,0 +1,31 @@
+<!--
+  Generated template for the PernikahanStatusEditPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Data Kelengkapan Pernikahan</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label stacked>No. Akta</ion-label>
+      <ion-input type="text" [(ngModel)]="pelengkap.no_akta"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>No. Porporasi</ion-label>
+      <ion-input type="text" [(ngModel)]="pelengkap.no_porporasi"></ion-input>
+    </ion-item>
+
+    <button ion-button block (click)="simpan(pelengkap)"></button>
+  </ion-list>
+
+</ion-content>

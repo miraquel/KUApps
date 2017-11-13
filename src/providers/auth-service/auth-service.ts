@@ -6,16 +6,6 @@ import { BaseUrl } from "../base-url";
 import * as moment from "moment";
 import 'rxjs/add/operator/map';
 
-export class User {
-  name: string;
-  email: string;
-
-  constructor(name: string, email: string) {
-    this.name = name;
-    this.email = email;
-  }
-}
-
 /*
   Generated class for the AuthServiceProvider provider.
 
@@ -25,13 +15,20 @@ export class User {
 @Injectable()
 export class AuthServiceProvider {
   urlMaster: string = BaseUrl.BASE_API_URL;
-  currentUser: User;
+  accessToken = {
+    id: '',
+    ttl: '',
+    created: '',
+    userId: '',
+    principalType: ''
+  }
+  user;
 
   constructor(public http: Http, private storage: Storage) {
     console.log('Hello AuthServiceProvider Provider');
   }
 
-  public login(credentials, userType) {
+  public adminLogin(credentials) {
     if (credentials.email === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
     }
@@ -45,29 +42,56 @@ export class AuthServiceProvider {
         headers: headers
       });
 
-      let body;
-      
-      if (userType === "username") {
-        body = JSON.stringify({
-          username: credentials.username,
-          password: credentials.password
-        });
-      }
-      else if (userType === "email") {
-        body = JSON.stringify({
-          email: credentials.email,
-          password: credentials.password
-        });
-      }
+      let body = JSON.stringify(credentials);
 
       var url = this.urlMaster+'/api/Admins/login';
       var response = this.http.post(url,body,options)
         .map(res => res.json())
         .timeout(5000);
       return response;
-
-      // this.currentUser = new User('Simon', 'saimon@devdactic.com');
     }
+  }
+
+  public pendaftarLogin(credentials) {
+    if (credentials.email === null || credentials.password === null) {
+      return Observable.throw("Please insert credentials");
+    }
+    else {
+      // At this point make a request to your backend to make a real check!
+      let headers = new Headers({
+        'Content-Type': 'application/json'
+      });
+
+      let options = new RequestOptions({
+        headers: headers
+      });
+
+      let body = JSON.stringify(credentials);
+
+      var url = this.urlMaster+'/api/Pendaftars/login';
+      var response = this.http.post(url,body,options)
+        .map(res => res.json())
+        .timeout(5000);
+      return response;
+    }
+  }
+
+  adminFindById(user) {
+    console.log(user);
+    var url = this.urlMaster+'/api/Admins/'+user.userId+'?filter={"include": "roles"}&access_token='+user.id;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
+  }
+
+  pendaftarFindById(user) {
+    console.log(user);
+    var url = this.urlMaster+'/api/Pendaftars/'+user.userId+'?access_token='+user.id;
+    var response = this.http.get(url)
+      .map(rs => rs.json())
+      .timeout(5000);
+    return response;
   }
 
   public register(credentials, token) {
@@ -100,7 +124,7 @@ export class AuthServiceProvider {
     return response;
   }
 
-  changePassword(password, token) {
+  pendaftarRegister(credentials) {
     let headers = new Headers({
       'Content-Type': 'application/json'
     });
@@ -110,11 +134,53 @@ export class AuthServiceProvider {
     });
 
     let body = JSON.stringify({
-      oldPassword: password.oldPassword,
-      newPassword: password.newPassword
+      nama: credentials.nama,
+      nomor_handphone: credentials.nomor_handphone,
+      username: credentials.username,
+      email: credentials.email,
+      password: credentials.password
+    });
+    console.log(body);
+
+    var url = this.urlMaster+'/api/Pendaftars';
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
+  adminChangePassword(password) {
+    console.log(this.accessToken.id);
+    let headers = new Headers({
+      'Content-Type': 'application/json'
     });
 
-    var url = this.urlMaster+'/api/Admins/change-password?access_token='+token;
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify(password);
+
+    var url = this.urlMaster+'/api/Admins/change-password?access_token='+this.accessToken.id;
+    var response = this.http.post(url,body,options)
+    .map(res => res.json())
+    .timeout(5000);
+    return response;
+  }
+
+  pendaftarChangePassword(password) {
+    console.log(this.accessToken);
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    let body = JSON.stringify(password);
+
+    var url = this.urlMaster+'/api/Pendaftars/change-password?access_token='+this.accessToken.id;
     var response = this.http.post(url,body,options)
     .map(res => res.json())
     .timeout(5000);
@@ -161,15 +227,6 @@ export class AuthServiceProvider {
   getUserInfo(currentLogedInUser) {
     console.log(currentLogedInUser);
     var url = this.urlMaster+'/api/Admins/'+currentLogedInUser.userId+'?filter={"include": ["roles"]}&access_token='+currentLogedInUser.token;
-    var response = this.http.get(url)
-      .map(rs => rs.json())
-      .timeout(5000);
-    return response;
-  }
-
-  checkStoredCredentials(currentLogedInUser) {
-    console.log(currentLogedInUser);
-    var url = this.urlMaster+'/api/Admins/'+currentLogedInUser.userId+'?access_token='+currentLogedInUser.token;
     var response = this.http.get(url)
       .map(rs => rs.json())
       .timeout(5000);
@@ -234,7 +291,7 @@ export class AuthServiceProvider {
     return response;
   }
 
-  public logout(token) {
+  public adminLogout(token) {
     let headers = new Headers({
       'Content-Type': 'application/json'
     });
@@ -244,6 +301,22 @@ export class AuthServiceProvider {
     });
 
     var url = this.urlMaster+'/api/Admins/logout'+'?access_token='+token;
+    var response = this.http.post(url,options)
+      .map(res => res.json())
+      .timeout(5000);
+    return response;
+  }
+
+  public pendaftarLogout() {
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    let options = new RequestOptions({
+      headers: headers
+    });
+
+    var url = this.urlMaster+'/api/Pendaftars/logout'+'?access_token='+this.accessToken.id;
     var response = this.http.post(url,options)
       .map(res => res.json())
       .timeout(5000);

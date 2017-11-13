@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, LOCALE_ID } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
 import { CurrencyPipe } from "@angular/common";
@@ -18,6 +18,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { PernikahanServiceProvider } from '../providers/pernikahan-service/pernikahan-service';
 import { LokasiServiceProvider } from '../providers/lokasi-service/lokasi-service';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -45,8 +47,11 @@ import { LokasiServiceProvider } from '../providers/lokasi-service/lokasi-servic
     CurrencyPipe,
     FileOpener,
     File,
-
+    {provide: LOCALE_ID, useValue: "id"},
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    FileTransfer,
+    FileTransferObject,
+    Camera,
     AuthServiceProvider,
     PernikahanServiceProvider,
     LokasiServiceProvider

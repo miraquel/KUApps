@@ -58,9 +58,9 @@ export class PernikahanPage {
     });
   }
 
-  LoadNikahDetails(id) {
+  LoadNikahDetails(nikah: Array<any>) {
     this.navCtrl.push('PernikahanDetailsPage', {
-      id
+      nikah
     });
   }
 

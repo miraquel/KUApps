@@ -1,0 +1,71 @@
+<!--
+  Generated template for the PernikahanCatinPriaDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Detail Calon Pengantin Pria</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <h2>Nama</h2>
+      <p>{{ catinpria.nama }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Tanggal Lahir</h2>
+      <p>{{ catinpria.tanggal_lahir | date:'d MMMM y' }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Agama</h2>
+      <p>{{ catinpria.agama }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Pekerjaan</h2>
+      <p>{{ catinpria.pekerjaan }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Alamat</h2>
+      <p>{{ catinpria.alamat }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Provinsi</h2>
+      <p>{{ catinpria.districts.regencies.provinces.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Kabupaten</h2>
+      <p>{{ catinpria.districts.regencies.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Kecamatan</h2>
+      <p>{{ catinpria.districts.name }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>Wali Nikah</h2>
+      <p>{{ catinpria.wali_nikah }}</p>
+    </ion-item>
+
+    <ion-item>
+      <h2>status</h2>
+      <p>{{ catinpria.status }}</p>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>

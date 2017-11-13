@@ -2,6 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ViewController, ToastController, LoadingController, Loading } from 'ionic-angular';
 import { LokasiServiceProvider } from "../../providers/lokasi-service/lokasi-service";
 import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pernikahan-service";
+import { AuthServiceProvider } from "../../providers/auth-service/auth-service";
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { BaseUrl } from "../../providers/base-url";
 
 /**
  * Generated class for the PendaftaranPage page.
@@ -15,16 +20,27 @@ import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pe
   templateUrl: 'pendaftaran.html',
 })
 export class PendaftaranPage {
+  urlMaster: string = BaseUrl.BASE_API_URL;
   callback;
   loading: Loading;
   bool: boolean = false;
   pageReview: boolean = true;
   hideFabButton: boolean = true;
 
+  _today = new Date();
+  _maxDate = new Date();
+  _datePria = new Date();
+  _dateWanita = new Date();
+  today;
+  maxDate;
+  datePria;
+  dateWanita;
+
   // Variable Model Calon Pengantin Pria
   provinsiSelectCatinPria;
   kabupatenSelectCatinPria;
   kecamatanSelectCatinPria;
+  noKtpCatinPria;
   namaCatinPria;
   tanggalLahirCatinPria;
   agamaCatinPria;
@@ -34,6 +50,7 @@ export class PendaftaranPage {
   alamatCatinPria;
   wali_nikahCatinPria;
   statusCatinPria;
+  imgKtpCatinPria;
 
   KabupatenDisableSelectorCatinPria: boolean = true;
   KecamatanDisableSelectorCatinPria: boolean = true;
@@ -44,6 +61,7 @@ export class PendaftaranPage {
   provinsiSelectCatinWanita;
   kabupatenSelectCatinWanita;
   kecamatanSelectCatinWanita;
+  noKtpCatinWanita;
   namaCatinWanita;
   tanggalLahirCatinWanita;
   agamaCatinWanita;
@@ -53,6 +71,8 @@ export class PendaftaranPage {
   alamatCatinWanita;
   wali_nikahCatinWanita;
   statusCatinWanita;
+  imgKtpCatinWanita;
+
   KabupatenDisableSelectorCatinWanita: boolean = true;
   KecamatanDisableSelectorCatinWanita: boolean = true;
 
@@ -87,9 +107,26 @@ export class PendaftaranPage {
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     private lokasiService: LokasiServiceProvider,
-    private pernikahanService: PernikahanServiceProvider
+    private pernikahanService: PernikahanServiceProvider,
+    private authService: AuthServiceProvider,
+    private transfer: FileTransfer,
+    private file: File,
+    private camera: Camera
   ){
     this.callback = this.navParams.get("callback");
+    console.log(this.authService.accessToken.userId);
+    console.log(this.authService.accessToken.id)
+    this._datePria.setFullYear(this._datePria.getFullYear() - 19);
+    this._dateWanita.setFullYear(this._dateWanita.getFullYear() - 16);
+    this._maxDate.setFullYear(this._maxDate.getFullYear() + 1);
+    this.datePria = this._datePria.toISOString();
+    this.dateWanita = this._dateWanita.toISOString();
+    this.today = this._today.toISOString();
+    this.maxDate = this._maxDate.toISOString();
+    console.log(this.today);
+    console.log(this.datePria);
+    console.log(this.dateWanita);
+    console.log(this.maxDate);
   }
 
   next(){
@@ -105,6 +142,40 @@ export class PendaftaranPage {
     this.signupSlider.lockSwipes(false);
     this.signupSlider.slidePrev();
     this.signupSlider.lockSwipes(true);
+  }
+
+  fotoKtpPria(){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+      this.imgKtpCatinPria = 'data:image/jpeg;base64,' + imageData;
+      // console.log(this.imgKtpCatinPria);
+    }, (err) => {
+      // handle error
+    });
+  }
+
+  fotoKtpWanita(){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+      this.imgKtpCatinWanita = 'data:image/jpeg;base64,' + imageData;
+      // console.log(this.imgKtpCatinPria);
+    }, (err) => {
+      // handle error
+    });
   }
 
   LoadProvinsi(){
@@ -287,9 +358,6 @@ export class PendaftaranPage {
   }
 
   simpan(){
-    // this.validasiForm();
-    // let statusValidasi = this.validasiForm();
-    // console.log(statusValidasi);
     if (this.hidePekerjaanCatinPria == false) {
       this.pekerjaanCatinPria = this.pekerjaanCbCatinPria;
     }
@@ -303,97 +371,104 @@ export class PendaftaranPage {
     else {
       this.pekerjaanCatinWanita = this.pekerjaanTbCatinWanita;
     }
-    // console.log("Pria");
-    // console.log("District: "+this.kecamatanSelectCatinPria);
-    // console.log("Nama: "+this.namaCatinPria);
-    // console.log("Tanggal Lahir "+this.tanggalLahirCatinPria);
-    // console.log("Agama: "+this.agamaCatinPria);
-    // console.log("Pekerjaan: "+this.pekerjaanCatinPria);
-    // console.log("Alamat: "+this.alamatCatinPria);
-    // console.log("Wali Nikah"+this.wali_nikahCatinPria);
-    // console.log("Status: "+this.statusCatinPria);
-    //
-    // console.log("Wanita");
-    // console.log("District: "+this.kecamatanSelectCatinWanita);
-    // console.log("Nama: "+this.namaCatinWanita);
-    // console.log("Tanggal Lahir: "+this.tanggalLahirCatinWanita);
-    // console.log("Agama: "+this.agamaCatinWanita);
-    // console.log("Pekerjaan: "+this.pekerjaanCatinWanita);
-    // console.log("Alamat: "+this.alamatCatinWanita);
-    // console.log("Wali Nikah: "+this.wali_nikahCatinWanita);
-    // console.log("Status: "+this.statusCatinWanita);
+
     console.log(this.pageReview);
 
     if (this.validasiForm()){
       // Mulai Proses Penyimpanan
       // Check Input Untuk Field Pekerjaan Yang Digunakan
-
-      if (this.pageReview === true) {
-        this.pageReview = false;
-        this.signupSlider.lockSwipes(false);
-        this.signupSlider.slideTo(2);
-        this.signupSlider.lockSwipes(true);
+      if (this.agamaCatinPria !== "Islam" || this.agamaCatinWanita !== "Islam") {
+        this.showToast("Salah Satu Calon Pengantin Beragama Non-Islam, Silahkan Mengurus Pernikahan Anda di Disdukcapil")
       }
       else {
-        this.showLoading();
-        this.pernikahanService.SimpanCatinPria(
-          this.kecamatanSelectCatinPria,
-          this.namaCatinPria,
-          this.tanggalLahirCatinPria,
-          this.agamaCatinPria,
-          this.pekerjaanCatinPria,
-          this.alamatCatinPria,
-          this.wali_nikahCatinPria,
-          this.statusCatinPria
-        ).then(
-          success => {
-            if (success) {
-                this.showToastTop('Data Calon Pengantin Pria Berhasil Ditambahkan');
-                console.log("Pria :"+success);
-                this.catinPriaId = success.id;
-                console.log(this.catinPriaId);
+        if (this.pageReview === true) {
+          this.pageReview = false;
+          this.signupSlider.lockSwipes(false);
+          this.signupSlider.slideTo(2);
+          this.signupSlider.lockSwipes(true);
+        }
+        else {
+          this.showLoading();
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          fileTransfer.upload(this.imgKtpCatinPria, this.urlMaster+'/api/Attachments/ktp/upload').then(
+            data => {
+              console.log(data);
+              this.pernikahanService.SimpanCatinPria(
+                this.kecamatanSelectCatinPria,
+                this.noKtpCatinPria,
+                JSON.parse(data.response),
+                this.namaCatinPria,
+                this.tanggalLahirCatinPria,
+                this.agamaCatinPria,
+                this.pekerjaanCatinPria,
+                this.alamatCatinPria,
+                this.wali_nikahCatinPria,
+                this.statusCatinPria
+              ).then(
+                success => {
+                  if (success) {
+                      this.showToastTop('Data Calon Pengantin Pria Berhasil Ditambahkan');
+                      console.log("Pria :"+success);
+                      this.catinPriaId = success.id;
+                      console.log(this.catinPriaId);
+                  }
+                  else {
+                    this.loading.dismiss();
+                    this.showToast('Simpan Data Gagal, Hubungi Admin Untuk Info Lebih Lanjut')
+                  }
+                },
+                error => {
+                  this.loading.dismiss();
+                  this.showToast('Simpan Data Gagal, Cek Jaringan Koneksi')
+                }
+              );
+            },
+            (err) => {
+              console.log(err);
             }
-            else {
-              this.loading.dismiss();
-              this.showToast('Simpan Data Gagal, Hubungi Admin Untuk Info Lebih Lanjut')
-            }
-          },
-          error => {
-            this.loading.dismiss();
-            this.showToast('Simpan Data Gagal, Cek Jaringan Koneksi')
-          }
-        );
+          );
 
-        this.pernikahanService.SimpanCatinWanita(
-          this.kecamatanSelectCatinWanita,
-          this.namaCatinWanita,
-          this.tanggalLahirCatinWanita,
-          this.agamaCatinWanita,
-          this.pekerjaanCatinWanita,
-          this.alamatCatinWanita,
-          this.wali_nikahCatinWanita,
-          this.statusCatinWanita
-        ).then(
-          success => {
-            if (success) {
-                this.showToast('Data Calon Pengantin Wanita Berhasil Ditambahkan');
-                console.log("Wanita :"+success)
-                this.CatinWanitaId = success.id;
-                console.log(this.CatinWanitaId);
-                this.hideFabButton = false;
-                this.loading.dismiss();
-                this.next();
+          fileTransfer.upload(this.imgKtpCatinWanita, this.urlMaster+'/api/Attachments/ktp/upload').then(
+            (data) => {
+              console.log(data);
+              this.pernikahanService.SimpanCatinWanita(
+                this.kecamatanSelectCatinWanita,
+                this.noKtpCatinWanita,
+                JSON.parse(data.response),
+                this.namaCatinWanita,
+                this.tanggalLahirCatinWanita,
+                this.agamaCatinWanita,
+                this.pekerjaanCatinWanita,
+                this.alamatCatinWanita,
+                this.wali_nikahCatinWanita,
+                this.statusCatinWanita
+              ).then(
+                success => {
+                  if (success) {
+                      this.showToast('Data Calon Pengantin Wanita Berhasil Ditambahkan');
+                      console.log("Wanita :"+success);
+                      this.CatinWanitaId = success.id;
+                      console.log(this.CatinWanitaId);
+                      this.hideFabButton = false;
+                      this.loading.dismiss();
+                      this.next();
+                  }
+                  else {
+                    this.loading.dismiss();
+                    this.showToast('Simpan Data Gagal, Hubungi Admin Untuk Info Lebih Lanjut')
+                  }
+                },
+                error => {
+                  this.loading.dismiss();
+                  this.showToast('Simpan Data Gagal, Cek Jaringan Koneksi')
+                }
+              );
+            },
+            (err) => {
+              console.log(err);
             }
-            else {
-              this.loading.dismiss();
-              this.showToast('Simpan Data Gagal, Hubungi Admin Untuk Info Lebih Lanjut')
-            }
-          },
-          error => {
-            this.loading.dismiss();
-            this.showToast('Simpan Data Gagal, Cek Jaringan Koneksi')
-          }
-        );
+          );
+        }
       }
     }
     else {
@@ -434,7 +509,6 @@ export class PendaftaranPage {
       this.CatinWanitaId,
       this.adminId,
       this.desaSelectNikah,
-      this.penghuluId,
       this.tanggalNikah
     ).then(
       success => {

@@ -16,6 +16,7 @@ import { PernikahanServiceProvider } from "../../providers/pernikahan-service/pe
 })
 export class InvoiceAddPage {
   loading: Loading;
+  callback;
   nikahId;
   invoice = {
     noSlip: '',
@@ -34,6 +35,7 @@ export class InvoiceAddPage {
     private viewCtrl: ViewController,
     private toastCtrl: ToastController
   ) {
+    this.callback = this.navParams.get("callback");
     this.nikahId = navParams.get("nikahId");
   }
 
@@ -61,11 +63,10 @@ export class InvoiceAddPage {
     );
   }
 
-  dismiss(){
-    let data = {
-      'message': 'Modal Dismissed'
-    }
-    this.viewCtrl.dismiss();
+  dismiss() {
+    this.callback(this.invoice).then(()=>{
+      this.navCtrl.pop();
+    });
   }
 
   showLoading(){

@@ -17,14 +17,10 @@ import { Storage } from '@ionic/storage';
 })
 export class LoginPage {
   loading: Loading;
-  userType = 'username';
-  _email;
-  _username;
-  _password;
-  registerCredentials;
-  currentLogedInUser = {
-    userId: '',
-    token:''
+  userType = 'pendaftar';
+  credentials = {
+    email: '',
+    password: ''
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private screenOrientation: ScreenOrientation, private auth: AuthServiceProvider, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private storage: Storage) {
@@ -38,31 +34,46 @@ export class LoginPage {
   initCredentials() {
     this.storage.ready().then(
       success => {
-        this.storage.get('userId').then(
-          val => {
-            if (val !== null) {
-              console.log(val);
-              this.currentLogedInUser.userId = val;
-              this.storage.get('token').then(
-                val => {
-                  this.currentLogedInUser.token = val;
-                  this.auth.checkStoredCredentials(this.currentLogedInUser)
-                  .subscribe(
-                    success => {
-                      this.navCtrl.setRoot('BerandaTabsPage');
-                    },
-                    error => {
-                      this.showError("Sesi anda telah berakhir, silahkan login kembali");
-                      this.storage.clear();
-                    }
-                  );
+        this.storage.get('user').then(
+          user => {
+            if (user !== null && user.principalType === 'Admin') {
+              console.log(user);
+              this.auth.accessToken = user;
+              this.auth.adminFindById(user)
+              .subscribe(
+                success => {
+                  this.navCtrl.setRoot('BerandaTabsPage');
+                  this.auth.user = success;
+                },
+                error => {
+                  this.showError("Sesi anda telah berakhir, silahkan login kembali");
+                  this.storage.clear();
                 }
               );
             }
+
+            else if (user !== null && user.principalType === 'Pendaftar') {
+              console.log(user);
+              this.auth.accessToken = user;
+              this.auth.pendaftarFindById(user)
+              .subscribe(
+                success => {
+                  this.navCtrl.setRoot('PendaftarTabsPage');
+                  this.auth.user = success;
+                  console.log(success);
+                },
+                error => {
+                  this.showError("Sesi anda telah berakhir, silahkan login kembali");
+                  this.storage.clear();
+                }
+              );
+            }
+
           }
         );
-      });
-    }
+      }
+    );
+  }
 
   public createAccount() {
     this.navCtrl.push('RegisterPage');
@@ -70,36 +81,55 @@ export class LoginPage {
 
   public login() {
     this.showLoading();
-    if (this.userType === "email") {
-        this.registerCredentials = {
-          email: this._email,
-          password: this._password
-        }
-    }
-    else if (this.userType === "username") {
-        this.registerCredentials = {
-          username: this._username,
-          password: this._password
-        }
-    }
-    this.auth.login(this.registerCredentials, this.userType).subscribe(
+
+    this.auth.adminLogin(this.credentials).subscribe(
       success => {
         this.navCtrl.setRoot('BerandaTabsPage');
-        this.storage.set('userId', success.userId);
-        this.storage.set('token', success.id);
+        this.storage.set('user', success);
+        this.auth.accessToken = success;
+        this.auth.adminFindById(success).subscribe(
+          success => {
+            console.log(success)
+            this.auth.user = success;
+          }
+        );
         console.log(success);
       },
       error => {
         if (error.statusText === "Unauthorized") {
-          this.showError("Akses ditolak, email / password salah");
-          console.log(error);
+          this.auth.pendaftarLogin(this.credentials).subscribe(
+            success => {
+              this.navCtrl.setRoot('PendaftarTabsPage');
+              this.storage.set('user', success);
+              this.auth.accessToken = success;
+              this.auth.pendaftarFindById(success).subscribe(
+                success => {
+                  console.log(success)
+                  this.auth.user = success;
+                }
+              );
+              console.log(success);
+            },
+            error => {
+              if (error.statusText === "Unauthorized") {
+                this.showError("Akses ditolak, email / password salah");
+                console.log(error);
+              }
+              else {
+                this.showError("Koneksi Error");
+                console.log(error);
+              }
+              this.loading.dismiss();
+            }
+          );
         }
         else {
           this.showError("Koneksi Error");
           console.log(error);
         }
         this.loading.dismiss();
-      });
+      }
+    );
   }
 
   showLoading() {

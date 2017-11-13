@@ -1,0 +1,249 @@
+<!--
+  Generated template for the PendaftarBerandaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Beranda</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="home" padding>
+
+  <ion-refresher *ngIf="display == true" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Tarik untuk memperbarui"
+      refreshingSpinner="circles"
+      refreshingText="Memperbarui..."
+      >
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngIf="display == false">
+    <ion-card-header>
+      <b>Data Pernikahan</b>
+    </ion-card-header>
+    <ion-card-content>
+      Pernikahan belum diinput, silahkan input data pernikahan pada tombol yang ada dibawah
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="display == true">
+    <ion-card>
+      <ion-item>
+        <ion-icon name="people"></ion-icon>
+        Pernikahan
+      </ion-item>
+      <ion-list>
+
+        <ion-item *ngIf="nikah?.no_akta != null">
+          <ion-label>No. Akta</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.no_akta }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="nikah?.no_porporasi != null">
+          <ion-label>No. Porporasi</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.no_porporasi }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tanggal</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.tanggal | date:"d MMMM y" }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Lokasi</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.village.name }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="nikah?.penghulu != null">
+          <ion-label>Penghulu</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.penghulu.nama }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Status</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.status }}
+          </ion-label>
+        </ion-item>
+
+        <button ion-item *ngIf="nikah?.invoice != null" (click)="ShowInvoiceDetails(nikah.invoice)">
+          <ion-label>Pembayaran</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.invoice.no_invoice }}
+          </ion-label>
+        </button>
+
+      </ion-list>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="person"></ion-icon>
+        Pengantin Pria
+        <!-- <button item-right round outline ion-button (click)="editCatinPria(nikah.catinpria)">
+          Edit
+        </button> -->
+      </ion-item>
+      <ion-list>
+
+        <ion-item>
+          <ion-label>Nama</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.nama }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>No. KTP</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.no_ktp }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <img width="200" [src]="_imgKtpCatinPria"/>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tanggal Lahir</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.tanggal_lahir | date:"d MMMM y" }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Agama</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.agama }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Alamat</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.alamat }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Pekerjaan</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.pekerjaan }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Status</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.status }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Wali Nikah</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinpria.wali_nikah }}
+          </ion-label>
+        </ion-item>
+
+      </ion-list>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-icon name="person"></ion-icon>
+        Pengantin Wanita
+        <!-- <button item-right round outline ion-button (click)="editCatinWanita(nikah.catinwanita)">
+          Edit
+        </button> -->
+      </ion-item>
+      <ion-list>
+
+        <ion-item>
+          <ion-label>Nama</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.nama }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>No. KTP</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.no_ktp }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <img width="200" [src]="_imgKtpCatinWanita"/>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tanggal Lahir</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.tanggal_lahir | date:"d MMMM y" }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Agama</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.agama }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Alamat</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.alamat }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Pekerjaan</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.pekerjaan }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Status</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.status }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Wali Nikah</ion-label>
+          <ion-label text-right text-wrap>
+            {{ nikah?.catinwanita.wali_nikah }}
+          </ion-label>
+        </ion-item>
+
+      </ion-list>
+    </ion-card>
+
+  </div>
+
+  <ion-fab right bottom *ngIf="display == false">
+    <button ion-fab color="default" (click)="ShowPendaftaran()"><ion-icon name="people"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>

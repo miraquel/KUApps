@@ -46,13 +46,22 @@ Ionic pages and navigation.
   </ion-toolbar>
 
   <ion-item>
+    <ion-label stacked>No. KTP</ion-label>
+    <ion-input placeholder="Isikan No. KTP" type="text" [(ngModel)]="noKtpCatinPria"></ion-input>
+  </ion-item>
+
+  <ion-label>Foto KTP</ion-label>
+  <img width="200" height="200" [src]="imgKtpCatinPria"/>
+  <button ion-button block (click)="fotoKtpPria()">Foto KTP</button>
+
+  <ion-item>
     <ion-label stacked>Nama</ion-label>
     <ion-input placeholder="Isikan Nama" type="text" [(ngModel)]="namaCatinPria"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label stacked>Tanggal Lahir</ion-label>
-    <ion-datetime placeholder="Atur Tanggal Lahir" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinPria"></ion-datetime>
+    <ion-label stacked>Tanggal Lahir (Minimal 19 Tahun)</ion-label>
+    <ion-datetime placeholder="Atur Tanggal Lahir" [max]="datePria" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinPria"></ion-datetime>
   </ion-item>
 
   <ion-item>
@@ -72,7 +81,6 @@ Ionic pages and navigation.
       <ion-option value="Wiraswasta">Wiraswasta</ion-option>
       <ion-option value="Pegawai Swasta">Pegawai Swasta</ion-option>
       <ion-option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</ion-option>
-      <ion-option value="Mahasiswa">Mahasiswa</ion-option>
       <ion-option value="Lainnya">Lainnya</ion-option>
     </ion-select>
   </ion-item>
@@ -139,13 +147,22 @@ Ionic pages and navigation.
 </ion-toolbar>
 
 <ion-item>
+  <ion-label stacked>No. KTP</ion-label>
+  <ion-input placeholder="Isikan No. KTP" type="text" [(ngModel)]="noKtpCatinWanita"></ion-input>
+</ion-item>
+
+<ion-label>Foto KTP</ion-label>
+<img width="200" height="200" [src]="imgKtpCatinWanita"/>
+<button ion-button block (click)="fotoKtpWanita()">Foto KTP</button>
+
+<ion-item>
   <ion-label stacked>Nama</ion-label>
   <ion-input placeholder="Isikan Nama" type="text" [(ngModel)]="namaCatinWanita"></ion-input>
 </ion-item>
 
 <ion-item>
-  <ion-label stacked>Tanggal Lahir</ion-label>
-  <ion-datetime placeholder="Atur Tanggal Lahir" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinWanita"></ion-datetime>
+  <ion-label stacked>Tanggal Lahir (Minimal 16 Tahun)</ion-label>
+  <ion-datetime placeholder="Atur Tanggal Lahir" [max]="dateWanita" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalLahirCatinWanita"></ion-datetime>
 </ion-item>
 
 <ion-item>
@@ -165,7 +182,6 @@ Ionic pages and navigation.
     <ion-option value="Wiraswasta">Wiraswasta</ion-option>
     <ion-option value="Pegawai Swasta">Pegawai Swasta</ion-option>
     <ion-option value="Pegawai Negeri Sipil">Pegawai Negeri Sipil</ion-option>
-    <ion-option value="Mahasiswa">Mahasiswa</ion-option>
     <ion-option value="Lainnya">Lainnya</ion-option>
   </ion-select>
 </ion-item>
@@ -323,15 +339,8 @@ Ionic pages and navigation.
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Penghulu</ion-label>
-      <ion-select placeholder="Pilih Penghulu" [(ngModel)]="penghuluId">
-        <ion-option *ngFor="let penghulu of penghulus" [value]="penghulu.id">{{ penghulu.nama }}</ion-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
       <ion-label stacked>Tanggal Nikah</ion-label>
-      <ion-datetime placeholder="Atur Tanggal Nikah" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalNikah"></ion-datetime>
+      <ion-datetime placeholder="Atur Tanggal Nikah" [min]="today" displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="tanggalNikah"></ion-datetime>
     </ion-item>
 
     <button ion-button round block (click)="simpanNikah()">Simpan</button>

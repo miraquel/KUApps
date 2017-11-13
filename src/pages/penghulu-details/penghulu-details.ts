@@ -39,6 +39,7 @@ export class PenghuluDetailsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private pernikahanService: PernikahanServiceProvider, private lokasiService: LokasiServiceProvider) {
     this.penghulu = navParams.get('penghulu');
+    console.log(this.penghulu);
     this._tanggal_lahir = moment(this.penghulu.tanggal_lahir).format("DD MMMM YYYY");
     this.penghulu.tanggal_lahir = this._tanggal_lahir;
   }
